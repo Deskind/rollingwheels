@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="deskind.com.rollingwheels.activities.MainActivity"
+    android:background="@drawable/bg_main"
+    android:orientation="vertical">
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/transparent_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:id="@+id/main_central"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/main_central_left"
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4">
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/main_central_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/fabs_relative"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab_plus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:src="@drawable/ic_plus"
+                    app:fabSize="mini"
+                    android:layout_centerHorizontal="true"/>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab_fuel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/fab_plus"
+                    android:src="@drawable/ic_gas"
+                    android:visibility="visible"
+                    app:backgroundTint="@color/green"
+                    app:fabSize="mini"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="15dp"/>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab_repair"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/fab_fuel"
+                    android:clickable="true"
+                    android:src="@drawable/ic_wrench"
+                    android:visibility="visible"
+                    app:backgroundTint="@color/orange_light"
+                    app:fabSize="mini"
+                    app:srcCompat="@drawable/ic_wrench"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="15dp"/>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab_fluid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/fab_repair"
+                    android:clickable="true"
+                    android:visibility="visible"
+                    app:backgroundTint="@color/light_blue"
+                    app:fabSize="mini"
+                    app:srcCompat="@drawable/ic_fluid"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="15dp"/>
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@id/fab_fluid"
+                    android:clickable="true"
+                    android:visibility="visible"
+                    app:backgroundTint="@color/blue_grey"
+                    app:fabSize="mini"
+                    app:srcCompat="@drawable/ic_filter"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="15dp"/>
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+</LinearLayout>

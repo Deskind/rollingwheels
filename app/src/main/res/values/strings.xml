@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">rollingwheels</string>
+    <string name="fuel">Fuel</string>
+    <string name="repairs_label">Repairs</string>
+    <string name="seven">777</string>
+    <string name="fluids">Fluids</string>
+    <string name="filters">Filters</string>
+</resources>
