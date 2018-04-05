@@ -6,6 +6,10 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 
+import java.util.List;
+
+import deskind.com.rollingwheels.entities.Car;
+
 
 public class DBUtility {
     //DB reference
@@ -48,4 +52,15 @@ public class DBUtility {
         }
     }
 
+    public static boolean checkCar(String userText) {
+        List<Car> cars = appDatabase.getCarsDao().getAllCars();
+
+        for(Car c : cars){
+            if(c.getCarBrand().equals(userText)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

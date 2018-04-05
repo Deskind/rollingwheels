@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.List;
+
+import deskind.com.rollingwheels.Fragmentator;
 import deskind.com.rollingwheels.R;
 import deskind.com.rollingwheels.activities.MnActivity;
 import deskind.com.rollingwheels.database.AppDatabase;
 import deskind.com.rollingwheels.database.DBUtility;
+import deskind.com.rollingwheels.entities.Car;
 import deskind.com.rollingwheels.entities.FuelUp;
 
 public class FuelUpFragment extends Fragment {
@@ -38,7 +43,7 @@ public class FuelUpFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fuel_up_dialog, container, false);
+        return inflater.inflate(R.layout.fuel_up_fragment, container, false);
     }
 
     @Override
@@ -105,8 +110,11 @@ public class FuelUpFragment extends Fragment {
             fuelUpValue.getText().toString().equals("")) {
             Toast.makeText(getActivity(), "You need to fill all filds", Toast.LENGTH_SHORT).show();
         } else {
-            String carName = MnActivity.getCurrentCar();
             AppDatabase appDatabase = DBUtility.getAppDatabase(getActivity());
+            ViewPager pager = getActivity().findViewById(R.id.pager);
+            List<Car> cars = appDatabase.getCarsDao().getAllCars();
+            String carName = cars.get(pager.getCurrentItem()).getCarBrand();
+
             DecimalFormat formatter = new DecimalFormat("#0.00");
 
             String fuelUpDate = this.fuelUpDate.getText().toString();
@@ -118,8 +126,8 @@ public class FuelUpFragment extends Fragment {
 
             Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
 
-            MnActivity.fragmentManager.popBackStackImmediate();
-            MnActivity.setCurrentFragment(null);
+            getActivity().getSupportFragmentManager().popBackStackImmediate();
+            Fragmentator.setCurrentFragment(null);
         }
 
     }
