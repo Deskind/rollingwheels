@@ -17,12 +17,14 @@ import java.util.ArrayList;
 import java.util.List;
 import deskind.com.rollingwheels.Fragmentator;
 import deskind.com.rollingwheels.R;
+import deskind.com.rollingwheels.SpendingsCalculator;
 import deskind.com.rollingwheels.adapters.CarsPagerAdapter;
 import deskind.com.rollingwheels.database.DBUtility;
 import deskind.com.rollingwheels.entities.Car;
 import deskind.com.rollingwheels.fragments.AddNewCarFragment;
 import deskind.com.rollingwheels.fragments.CarFragment;
 import deskind.com.rollingwheels.fragments.DeleteCarFragment;
+import deskind.com.rollingwheels.fragments.FuelUpFragment;
 import deskind.com.rollingwheels.fragments.SpendingsFragment;
 
 
@@ -39,18 +41,49 @@ public class MnActivity extends AppCompatActivity {
     private static List<Car> cars;
     public static List<Fragment> sliderFragments;
 
+    private static SpendingsCalculator calculator;
+    private static SpendingsFragment spendingsFragment;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_const);
 
+        //find views
         pager = findViewById(R.id.pager);
         ImageButton addNewCar = findViewById(R.id.ib_add_car);
 
+        //objects
+        calculator = new SpendingsCalculator();
+        spendingsFragment = new SpendingsFragment();
+
+        //fab buttons
+        fabPlus = findViewById(R.id.fab_plus);
+        fabFuel = findViewById(R.id.fab_fuel);
+        fabRepair = findViewById(R.id.fab_repair);
+        fabFluid = findViewById(R.id.fab_fluid);
+        fabFilter = findViewById(R.id.fab_filter);
+
+        //load animations
+        open = getAnimation(R.anim.fab_open, this);
+        close = getAnimation(R.anim.fab_close, this);
+        clockwise = getAnimation(R.anim.rotate_clockwise, this);
+        anticlockwise = getAnimation(R.anim.rotate_anticlockwise, this);
+
+        //listeners
+        fabPlus.setOnClickListener(new FabPlusClicked());
+
+        fabFuel.setOnClickListener(new OnFabClicked());
+            //set tag for fab
+            fabFuel.setTag(new FuelUpFragment());
+
+        //initialize collection for fragments that will be in a pager
         sliderFragments = new ArrayList<>();
 
+        //get cars from database
         cars = DBUtility.getAppDatabase(this).getCarsDao().getAllCars();
 
+        //create adapter
         adapter = new CarsPagerAdapter(getSupportFragmentManager());
 
         //Create fragment for every car in a list and add it to sliderFragments
@@ -65,10 +98,13 @@ public class MnActivity extends AppCompatActivity {
             }
         }
 
+        //set adapter to pager
         pager.setAdapter(adapter);
 
-        showFragment(new SpendingsFragment(), R.id.central_fragment);
+        //show spendings fragment in central fragment
+        showFragment(spendingsFragment, R.id.central_fragment);
 
+        //if no available cars in app
         if(cars.isEmpty()){
             Toast.makeText(this, "Add a car ...", Toast.LENGTH_LONG).show();
             replaceFragment(R.id.central_fragment, new AddNewCarFragment());

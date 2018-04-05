@@ -59,8 +59,6 @@ public class AddNewCarFragment extends Fragment {
                 //notify adapter
                 MnActivity.adapter.notifyDataSetChanged();
 
-                //move pager to newly created car
-                MnActivity.pager.setCurrentItem(MnActivity.sliderFragments.size()-1);
 
                 //add new car to database
                 DBUtility.getAppDatabase(getActivity()).getCarsDao().insertNewCar(new Car(userText));
@@ -70,6 +68,8 @@ public class AddNewCarFragment extends Fragment {
                 //return to spendings fragment
                 getFragmentManager().popBackStackImmediate();
 
+                //move pager to newly created car
+                MnActivity.pager.setCurrentItem(MnActivity.sliderFragments.size()-1);
             }
         });
 

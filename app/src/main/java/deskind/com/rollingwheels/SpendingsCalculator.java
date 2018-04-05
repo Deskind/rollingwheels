@@ -18,9 +18,11 @@ public class SpendingsCalculator {
 
         String carName = cars.get(pagerPosition).getCarBrand();
 
-        for(FuelUp fuelUp : fuelUps){
-            if(fuelUp.getCarBrand().equals(carName)){
-                fuelSpendings+=fuelUp.getCost()*fuelUp.getLiters();
+        if(!fuelUps.isEmpty()) {
+            for (FuelUp fuelUp : fuelUps) {
+                if (fuelUp.getCarBrand().equals(carName)) {
+                    fuelSpendings += fuelUp.getCost() * fuelUp.getLiters();
+                }
             }
         }
         return fuelSpendings;

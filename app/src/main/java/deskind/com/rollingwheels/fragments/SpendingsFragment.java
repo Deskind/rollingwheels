@@ -11,8 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import deskind.com.rollingwheels.R;
 import deskind.com.rollingwheels.SpendingsCalculator;
+import deskind.com.rollingwheels.activities.MnActivity;
 
 public class SpendingsFragment extends Fragment {
+    SpendingsCalculator calculator = new SpendingsCalculator();
+    ViewPager pager;
 
     private TextView tvFuel, tvRepairs,tvFluids, tvFilters, fuelSpendings, repairsSpendings, fluidsSpendings, filtersSpendings;
     private ImageView ivFuelList, ivRepairsList, ivFluidsList, ivFiltersList;
@@ -27,11 +30,24 @@ public class SpendingsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        SpendingsCalculator calculator = new SpendingsCalculator();
-        ViewPager pager = getActivity().findViewById(R.id.pager);
-        int pagerPosition = pager.getCurrentItem();
+        pager = MnActivity.pager;
+
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            @Override
+            public void onPageSelected(int position) {
+                setFuelUpSpendings();
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
 
         fuelSpendings = getView().findViewById(R.id.fuel_spendings);
-//        fuelSpendings.setText(String.format("%.1f", calculator.calcFuelSpendings(getActivity(), pagerPosition)));
+        setFuelUpSpendings();
+    }
+
+    public void setFuelUpSpendings (){
+        fuelSpendings.setText(String.format("%.1f", calculator.calcFuelSpendings(getActivity(), pager.getCurrentItem())));
     }
 }
