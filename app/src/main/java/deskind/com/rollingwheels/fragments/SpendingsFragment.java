@@ -1,5 +1,6 @@
 package deskind.com.rollingwheels.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -17,11 +18,11 @@ import deskind.com.rollingwheels.SpendingsCalculator;
 import deskind.com.rollingwheels.activities.MnActivity;
 
 public class SpendingsFragment extends Fragment {
-    SpendingsCalculator calculator = new SpendingsCalculator();
-    ViewPager pager;
+    public static SpendingsCalculator calculator = new SpendingsCalculator();
+    public static TextView tvFuel, tvRepairs,tvFluids, tvFilters, fuelSpendings, repairsSpendings, fluidsSpendings, filtersSpendings;
+    public static ImageView ivFuelList, ivRepairsList, ivFluidsList, ivFiltersList;
 
-    private TextView tvFuel, tvRepairs,tvFluids, tvFilters, fuelSpendings, repairsSpendings, fluidsSpendings, filtersSpendings;
-    private ImageView ivFuelList, ivRepairsList, ivFluidsList, ivFiltersList;
+    private static Context context;
 
     @Nullable
     @Override
@@ -33,27 +34,12 @@ public class SpendingsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        pager = MnActivity.pager;
-
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-            @Override
-            public void onPageSelected(int position) {
-                Log.i("CLASS", Fragmentator.getCurrentFragment().getClass().toString());
-                if(Fragmentator.getCurrentFragment() instanceof SpendingsFragment) {
-                    setFuelUpSpendings();
-                }
-            }
-            @Override
-            public void onPageScrollStateChanged(int state) {}
-        });
-
+        context = getActivity();
         fuelSpendings = getView().findViewById(R.id.fuel_spendings);
         setFuelUpSpendings();
     }
 
-    public void setFuelUpSpendings (){
-        fuelSpendings.setText(String.format("%.1f", calculator.calcFuelSpendings(getActivity(), pager.getCurrentItem())));
+    public static void setFuelUpSpendings (){
+        fuelSpendings.setText(String.format("%.1f", calculator.calcFuelSpendings(context, MnActivity.pager.getCurrentItem())));
     }
 }

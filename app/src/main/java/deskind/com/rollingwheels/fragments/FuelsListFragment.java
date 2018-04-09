@@ -1,5 +1,6 @@
 package deskind.com.rollingwheels.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,8 @@ import android.widget.ExpandableListView;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import deskind.com.rollingwheels.R;
 import deskind.com.rollingwheels.adapters.ExpandableFuelsListAdapter;
 import deskind.com.rollingwheels.database.DBUtility;
@@ -18,9 +21,12 @@ import deskind.com.rollingwheels.entities.FuelUp;
 
 public class FuelsListFragment extends Fragment {
 
+    public static ExpandableListView elv;
+
     public static ExpandableFuelsListAdapter adapter;
     public static List<FuelUp> headersList;
     public static HashMap<Integer, List<Integer>> mapContent;
+    public static Context context;
 
     @Nullable
     @Override
@@ -32,26 +38,21 @@ public class FuelsListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //views
-        ExpandableListView elv = getActivity().findViewById(R.id.elv_fuels);
-
-        //get fuel ups from database
-        List<FuelUp> fuelUps = DBUtility.getAppDatabase(getContext()).getCarsDao().getFuelUps();
-
-        //initialize
+        //init
+        context = getActivity();
         headersList = new ArrayList<>();
         mapContent = new HashMap<>();
 
+        //views
+        elv = getActivity().findViewById(R.id.elv_fuels);
+
         //car in the pager
-        String name = getArguments().getString("name");
+        String car = getArguments().getString("name");
 
-        //fiil with data
-        for(FuelUp fuelUp : fuelUps){
-            if(fuelUp.getCarBrand().equals(name)){
-                headersList.add(fuelUp);
-            }
-        }
+        //Get fuel ups from database
+        headersList = DBUtility.getAppDatabase(getContext()).getCarsDao().getFuelUpsFor(car);
 
+        //Fill data
         for(FuelUp fuelUp : headersList){
             int id = fuelUp.getFuelUpId();
             int liters = fuelUp.getLiters();
@@ -69,5 +70,29 @@ public class FuelsListFragment extends Fragment {
 
     public ExpandableFuelsListAdapter getAdapter() {
         return adapter;
+    }
+
+    public static void update(String carName) {
+
+        headersList = new ArrayList<>();
+        mapContent = new HashMap<>();
+
+        //get data from db
+        headersList = DBUtility.getAppDatabase(context).getCarsDao().getFuelUpsFor(carName);
+
+        //fill with data
+        for(FuelUp fuelUp : headersList){
+            int id = fuelUp.getFuelUpId();
+            int liters = fuelUp.getLiters();
+
+            ArrayList<Integer> list = new ArrayList<>();
+            list.add(liters);
+
+            mapContent.put(id, list);
+        }
+
+        //create adapter and set to extendable list view
+        adapter = new ExpandableFuelsListAdapter(context, headersList, mapContent);
+        elv.setAdapter(adapter);
     }
 }

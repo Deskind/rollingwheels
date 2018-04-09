@@ -34,8 +34,11 @@ public interface CarsDAO {
     @Query("SELECT * FROM 'Car' where car_brand = :car_brand")
     public Car getCar(String car_brand);
 
-    @Query("SELECT * FROM 'FuelUp'")
+    @Query("SELECT * FROM FuelUp")
     public List<FuelUp> getFuelUps();
+
+    @Query("SELECT * FROM FuelUp where car_brand = :car_brand")
+    public List<FuelUp> getFuelUpsFor(String car_brand);
 
     @Query("SELECT * FROM 'Car'")
     public List<Car> getAllCars();

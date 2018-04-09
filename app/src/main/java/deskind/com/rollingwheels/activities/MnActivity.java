@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -43,9 +45,10 @@ public class MnActivity extends AppCompatActivity {
     public static List<Fragment> sliderFragments;
 
     private static SpendingsCalculator calculator;
+    
+    private FragmentManager fragmentManager;
 
     private SpendingsFragment spendingsFragment;
-    private FuelsListFragment fuelsListFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class MnActivity extends AppCompatActivity {
         //objects
         calculator = new SpendingsCalculator();
         spendingsFragment = new SpendingsFragment();
+        fragmentManager = getSupportFragmentManager();
 
         //fab buttons
         fabPlus = findViewById(R.id.fab_plus);
@@ -80,6 +84,22 @@ public class MnActivity extends AppCompatActivity {
             //set tag for fab
             fabFuel.setTag(new FuelUpFragment());
 
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
+            @Override
+            public void onPageSelected(int position) {
+                //update spendings
+                SpendingsFragment.setFuelUpSpendings();
+
+                //update fuels list fragment (car name as method argument)
+                if(FuelsListFragment.elv != null){
+                    FuelsListFragment.update(cars.get(pager.getCurrentItem()).getCarBrand());
+                }
+            }
+            @Override
+            public void onPageScrollStateChanged(int state) {}
+        });
         //initialize collection for fragments that will be in a pager
         sliderFragments = new ArrayList<>();
 
@@ -87,7 +107,7 @@ public class MnActivity extends AppCompatActivity {
         cars = DBUtility.getAppDatabase(this).getCarsDao().getAllCars();
 
         //create adapter
-        adapter = new CarsPagerAdapter(getSupportFragmentManager());
+        adapter = new CarsPagerAdapter(fragmentManager);
 
         //Create fragment for every car in a list and add it to sliderFragments
         if(!cars.isEmpty()) {
@@ -115,7 +135,7 @@ public class MnActivity extends AppCompatActivity {
     }
 
     public void addNewCar(View v){
-        replaceFragment(R.id.central_fragment, new AddNewCarFragment());
+        showFragment(new AddNewCarFragment(), R.id.central_fragment);
     }
     
     public void deleteCar(View v){
@@ -123,9 +143,7 @@ public class MnActivity extends AppCompatActivity {
     }
 
     public void showFuelsList(View v){
-        if(fuelsListFragment == null) {
-            fuelsListFragment = new FuelsListFragment();
-        }
+        FuelsListFragment fuelsListFragment = new FuelsListFragment();
 
         Bundle b = new Bundle();
         b.putString("name", cars.get(pager.getCurrentItem()).getCarBrand());
@@ -144,16 +162,22 @@ public class MnActivity extends AppCompatActivity {
 
     private void showFragment(Fragment f, int containerId){
         setCurrentFragment(f);
-        getSupportFragmentManager().beginTransaction().add(containerId, f).commit();
+
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.add(containerId, f).commit();
     }
 
     public void replaceFragment(int containerId, Fragment f){
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragmentator.setCurrentFragment(f);
+
+        FragmentTransaction ft = fragmentManager.beginTransaction();
         ft.replace(containerId, f);
         ft.addToBackStack(null);
         ft.commit();
 
-        Fragmentator.setCurrentFragment(f);
+        int fmCount = fragmentManager.getBackStackEntryCount();
+
+        Log.i("BACKSTACKSIZE", String.valueOf(fmCount));
     }
 
     private Animation getAnimation(int animId, Context context){
