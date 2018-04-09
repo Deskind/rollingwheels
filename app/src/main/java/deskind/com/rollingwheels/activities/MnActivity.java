@@ -25,6 +25,7 @@ import deskind.com.rollingwheels.fragments.AddNewCarFragment;
 import deskind.com.rollingwheels.fragments.CarFragment;
 import deskind.com.rollingwheels.fragments.DeleteCarFragment;
 import deskind.com.rollingwheels.fragments.FuelUpFragment;
+import deskind.com.rollingwheels.fragments.FuelsListFragment;
 import deskind.com.rollingwheels.fragments.SpendingsFragment;
 
 
@@ -38,11 +39,13 @@ public class MnActivity extends AppCompatActivity {
     public static ViewPager pager;
     public static CarsPagerAdapter adapter;
 
-    private static List<Car> cars;
+    public static List<Car> cars;
     public static List<Fragment> sliderFragments;
 
     private static SpendingsCalculator calculator;
-    private static SpendingsFragment spendingsFragment;
+
+    private SpendingsFragment spendingsFragment;
+    private FuelsListFragment fuelsListFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -119,6 +122,18 @@ public class MnActivity extends AppCompatActivity {
         replaceFragment(R.id.central_fragment, new DeleteCarFragment());
     }
 
+    public void showFuelsList(View v){
+        if(fuelsListFragment == null) {
+            fuelsListFragment = new FuelsListFragment();
+        }
+
+        Bundle b = new Bundle();
+        b.putString("name", cars.get(pager.getCurrentItem()).getCarBrand());
+        fuelsListFragment.setArguments(b);
+
+        replaceFragment(R.id.central_fragment, fuelsListFragment);
+    }
+
     public static List<Fragment> getSliderFragments() {
         return sliderFragments;
     }
@@ -137,6 +152,8 @@ public class MnActivity extends AppCompatActivity {
         ft.replace(containerId, f);
         ft.addToBackStack(null);
         ft.commit();
+
+        Fragmentator.setCurrentFragment(f);
     }
 
     private Animation getAnimation(int animId, Context context){

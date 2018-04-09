@@ -46,6 +46,9 @@ public class AddNewCarFragment extends Fragment {
                     }
                 }
 
+                //add car to collection
+                MnActivity.cars.add(new Car(userText));
+
                 //add new fragment to cars pager
                 CarFragment f = new CarFragment();
                 Bundle b = new Bundle();

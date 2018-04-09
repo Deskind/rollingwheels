@@ -4,11 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import deskind.com.rollingwheels.Fragmentator;
 import deskind.com.rollingwheels.R;
 import deskind.com.rollingwheels.SpendingsCalculator;
 import deskind.com.rollingwheels.activities.MnActivity;
@@ -37,7 +40,10 @@ public class SpendingsFragment extends Fragment {
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
             @Override
             public void onPageSelected(int position) {
-                setFuelUpSpendings();
+                Log.i("CLASS", Fragmentator.getCurrentFragment().getClass().toString());
+                if(Fragmentator.getCurrentFragment() instanceof SpendingsFragment) {
+                    setFuelUpSpendings();
+                }
             }
             @Override
             public void onPageScrollStateChanged(int state) {}

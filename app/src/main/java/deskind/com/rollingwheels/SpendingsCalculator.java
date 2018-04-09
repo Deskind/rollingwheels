@@ -16,15 +16,20 @@ public class SpendingsCalculator {
         List<FuelUp> fuelUps = DBUtility.getAppDatabase(context).getCarsDao().getFuelUps();
         List<Car> cars = DBUtility.getAppDatabase(context).getCarsDao().getAllCars();
 
-        String carName = cars.get(pagerPosition).getCarBrand();
+        if(!cars.isEmpty()) {
+            String carName = cars.get(pagerPosition).getCarBrand();
 
-        if(!fuelUps.isEmpty()) {
-            for (FuelUp fuelUp : fuelUps) {
-                if (fuelUp.getCarBrand().equals(carName)) {
-                    fuelSpendings += fuelUp.getCost() * fuelUp.getLiters();
+            if(!fuelUps.isEmpty()) {
+                for (FuelUp fuelUp : fuelUps) {
+                    if (fuelUp.getCarBrand().equals(carName)) {
+                        fuelSpendings += fuelUp.getCost() * fuelUp.getLiters();
+                    }
                 }
             }
+
         }
+
+
         return fuelSpendings;
     }
 }
