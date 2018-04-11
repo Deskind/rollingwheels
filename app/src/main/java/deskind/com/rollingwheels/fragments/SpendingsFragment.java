@@ -36,10 +36,17 @@ public class SpendingsFragment extends Fragment {
 
         context = getActivity();
         fuelSpendings = getView().findViewById(R.id.fuel_spendings);
+        repairsSpendings = getView().findViewById(R.id.repairs_spendings);
+
         setFuelUpSpendings();
+        setRepairSpendings();
     }
 
     public static void setFuelUpSpendings (){
         fuelSpendings.setText(String.format("%.1f", calculator.calcFuelSpendings(context, MnActivity.pager.getCurrentItem())));
+    }
+
+    public static void setRepairSpendings() {
+        repairsSpendings.setText(String.valueOf(calculator.calcRepairSpendings(context, MnActivity.pager.getCurrentItem())));
     }
 }

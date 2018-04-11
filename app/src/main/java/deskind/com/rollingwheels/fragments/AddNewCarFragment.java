@@ -52,7 +52,7 @@ public class AddNewCarFragment extends Fragment {
                 //add new fragment to cars pager
                 CarFragment f = new CarFragment();
                 Bundle b = new Bundle();
-                b.putInt("SLIDER_INDEX", MnActivity.getSliderFragments().size());
+                b.putInt("SLIDER_INDEX", MnActivity.sliderFragments.size());
                 b.putString("CAR_NAME", userText);
                 f.setArguments(b);
 

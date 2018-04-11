@@ -38,12 +38,11 @@ public class Repair {
     @ColumnInfo(name = "Цена")
     public int partPrice;
 
-    public Repair(String carBrand, String date, long mileage, String manufacturer, String partNumber, String description, int partPrice) {
+    public Repair(String carBrand, String date, long mileage, String manufacturer, String description, int partPrice) {
         this.carBrand = carBrand;
         this.date = date;
         this.mileage = mileage;
         this.manufacturer = manufacturer;
-        this.partNumber = partNumber;
         this.description = description;
         this.partPrice = partPrice;
     }

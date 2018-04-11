@@ -24,8 +24,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DeleteCarActivity"
-            android:theme="@android:style/Theme.Holo.Dialog"/>
+        <activity android:name=".activities.SetMileageActivity"
+            android:theme="@android:style/Theme.Holo.Dialog">
+        </activity>
     </application>
 
 </manifest>

@@ -19,5 +19,27 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.35000002" />
+
+    <TextView
+        android:id="@+id/tv_car_mileage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="--- ---"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:text="Mileage: "
+        android:textSize="10sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_car_mileage"
+        app:layout_constraintEnd_toStartOf="@+id/tv_car_mileage" />
 </android.support.constraint.ConstraintLayout>

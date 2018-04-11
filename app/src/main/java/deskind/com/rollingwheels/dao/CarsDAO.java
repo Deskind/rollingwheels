@@ -56,7 +56,7 @@ public interface CarsDAO {
     public List<FilterService> getAllFilterServices(String carBrand);
 
     @Query("SELECT * FROM Repair where CarBrand = :carBrand ORDER BY \"Пробег\" ASC")
-    public Repair[] getAllRapairsForBrand(String carBrand);
+    public List<Repair> getAllRapairsForBrand(String carBrand);
 
     @Query("SELECT price FROM FluidService where car_brand = :carBrand")
     public int[] getFluidServicesTotalCost(String carBrand);

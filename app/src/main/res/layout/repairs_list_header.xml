@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/repairs_list_header_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/repairs_list_header_mileage"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repairs_list_divider" />
+
+    <TextView
+        android:id="@+id/repairs_list_header_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/repairs_list_header_date" />
+
+    <LinearLayout
+        android:id="@+id/repairs_list_divider"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/hint_grey_light"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+
+    <TextView
+        android:id="@+id/repairs_list_header_mileage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/repairs_list_header_price"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/repairs_list_header_date"
+        app:layout_constraintTop_toBottomOf="@+id/repairs_list_divider" />
+
+    <TextView
+        android:id="@+id/repairs_list_header_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="8dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/repairs_list_header_mileage"
+        app:layout_constraintTop_toBottomOf="@+id/repairs_list_divider"
+        android:textStyle="bold"/>
+
+</android.support.constraint.ConstraintLayout>
