@@ -43,10 +43,10 @@ public class SpendingsFragment extends Fragment {
     }
 
     public static void setFuelUpSpendings (){
-        fuelSpendings.setText(String.format("%.1f", calculator.calcFuelSpendings(context, MnActivity.pager.getCurrentItem())));
+//        fuelSpendings.setText(String.format("%.1f", calculator.calcFuelSpendings(context, MnActivity.pager.getCurrentItem())));
     }
 
     public static void setRepairSpendings() {
-        repairsSpendings.setText(String.valueOf(calculator.calcRepairSpendings(context, MnActivity.pager.getCurrentItem())));
+//        repairsSpendings.setText(String.valueOf(calculator.calcRepairSpendings(context, MnActivity.pager.getCurrentItem())));
     }
 }

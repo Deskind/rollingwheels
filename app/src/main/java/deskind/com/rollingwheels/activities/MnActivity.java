@@ -7,22 +7,21 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageButton;
-import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import deskind.com.rollingwheels.Fragmentator;
 import deskind.com.rollingwheels.R;
 import deskind.com.rollingwheels.SpendingsCalculator;
 import deskind.com.rollingwheels.adapters.CarsPagerAdapter;
+import deskind.com.rollingwheels.database.AppDatabase;
 import deskind.com.rollingwheels.database.DBUtility;
 import deskind.com.rollingwheels.entities.Car;
 import deskind.com.rollingwheels.fragments.AddNewCarFragment;
@@ -30,7 +29,6 @@ import deskind.com.rollingwheels.fragments.CarFragment;
 import deskind.com.rollingwheels.fragments.DeleteCarFragment;
 import deskind.com.rollingwheels.fragments.FuelUpFragment;
 import deskind.com.rollingwheels.fragments.FuelsListFragment;
-import deskind.com.rollingwheels.fragments.RepairsListFragment;
 import deskind.com.rollingwheels.fragments.RepairsListFragment;
 import deskind.com.rollingwheels.fragments.ServiceFragment;
 import deskind.com.rollingwheels.fragments.SpendingsFragment;
@@ -43,17 +41,19 @@ public class MnActivity extends AppCompatActivity {
 
     private static boolean isFabOpen = false;
 
+    private ViewPager p;
+    //temp pager reference
     public static ViewPager pager;
-    public static CarsPagerAdapter adapter;
 
     public static List<Car> cars;
-    public static List<CarFragment> sliderFragments;
 
     private static SpendingsCalculator calculator;
     
     private FragmentManager fragmentManager;
+    SpendingsFragment spendingsFragment;
 
-    private SpendingsFragment spendingsFragment;
+    private List<CarFragment> carFragments;
+
     private RepairsListFragment repairsListFragment;
 
     @Override
@@ -61,101 +61,66 @@ public class MnActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_const);
 
-        //find views
-        pager = findViewById(R.id.pager);
-        ImageButton addNewCar = findViewById(R.id.ib_add_car);
-
-        //objects
-        SharedPreferences sharedPreferences = this.getSharedPreferences("miles", Context.MODE_PRIVATE);
-        calculator = new SpendingsCalculator();
-        spendingsFragment = new SpendingsFragment();
+        //init
+        AppDatabase database = DBUtility.getAppDatabase(this);
         fragmentManager = getSupportFragmentManager();
 
-        //fab buttons
-        fabPlus = findViewById(R.id.fab_plus);
         fabFuel = findViewById(R.id.fab_fuel);
         fabRepair = findViewById(R.id.fab_repair);
-        fabFluid = findViewById(R.id.fab_fluid);
-        fabFilter = findViewById(R.id.fab_filter);
-
-        //load animations
-        open = getAnimation(R.anim.fab_open, this);
-        close = getAnimation(R.anim.fab_close, this);
-        clockwise = getAnimation(R.anim.rotate_clockwise, this);
-        anticlockwise = getAnimation(R.anim.rotate_anticlockwise, this);
 
         //listeners
-        fabPlus.setOnClickListener(new FabPlusClicked());
+        fragmentManager.addOnBackStackChangedListener(new MyBackStackChangedListener());
+        fabFuel.setOnClickListener(new FabFuelClicked());
+        fabRepair.setOnClickListener(new FabRepairClicked());
 
-        fabFuel.setOnClickListener(new OnFabClicked());
+        //get all cars from db
+        cars = database.getCarsDao().getAllCars();
 
-            //set tag for fabs
-            fabFuel.setTag(new FuelUpFragment());
+        //initialize list of fragments
+        carFragments = new ArrayList<>();
 
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
-            @Override
-            public void onPageSelected(int position) {
-                //trying to set mileage for current car
-                long mileage = getSharedPreferences("miles", Context.MODE_PRIVATE).getLong(MnActivity.cars.get(MnActivity.pager.getCurrentItem()).getCarBrand(), 0);
-                if(mileage != 0) {
-                    sliderFragments.get(position).setMileage(mileage);
-                }
+        //creating fragments
+        createCarsFragments(cars, carFragments);
 
-                //update spendings
-                SpendingsFragment.setFuelUpSpendings();
-                SpendingsFragment.setRepairSpendings();
-
-                //update fuels list fragment (car name as method argument)
-                if(FuelsListFragment.elv != null){
-                    FuelsListFragment.update(cars.get(pager.getCurrentItem()).getCarBrand());
-                }
-
-                if(repairsListFragment != null){
-                    repairsListFragment.prepareData();
-                }
-            }
-            @Override
-            public void onPageScrollStateChanged(int state) {}
-        });
-
-        //initialize collection for fragments that will be in a pager
-        sliderFragments = new ArrayList<>();
-
-        //get cars from database
-        cars = DBUtility.getAppDatabase(this).getCarsDao().getAllCars();
-
-        //create adapter
-        adapter = new CarsPagerAdapter(fragmentManager);
-
-        //Create fragment for every car in a list and add it to sliderFragments
-        if(!cars.isEmpty()) {
-            for (int i = 0; i < cars.size(); i++) {
-                CarFragment f = new CarFragment();
-                Bundle b = new Bundle();
-                b.putInt("SLIDER_INDEX", i);
-                b.putString("CAR_NAME", cars.get(i).getCarBrand());
-                if(i == 0){
-                    long l = getSharedPreferences("miles", Context.MODE_PRIVATE).getLong(MnActivity.cars.get(MnActivity.pager.getCurrentItem()).getCarBrand(), 0);
-                    b.putLong("mileage", l);
-                }
-                f.setArguments(b);
-                sliderFragments.add(f);
-            }
-        }
+        //create adapter for slider
+        CarsPagerAdapter carsAdapter = new CarsPagerAdapter(getSupportFragmentManager(), carFragments);
 
         //set adapter to pager
-        pager.setAdapter(adapter);
+        p = findViewById(R.id.pager);
+        //init temp
+        pager = p;
+        p.setAdapter(carsAdapter);
 
-        //show spendings fragment in central fragment
-        showFragment(spendingsFragment, R.id.central_fragment);
+        pager.setOnPageChangeListener(new CarsPagerListener());
 
-        //if no available cars in app
-        if(cars.isEmpty()){
-            Toast.makeText(this, "Add a car ...", Toast.LENGTH_LONG).show();
-            replaceFragment(R.id.central_fragment, new AddNewCarFragment());
+        //hide sp_fragment from main layout
+        if(fragmentManager.getBackStackEntryCount() != 0){
+            findViewById(R.id.sp_fragment).setVisibility(View.INVISIBLE);
         }
+    }
+
+    //methods fills list of fragments based on cars list
+    private void createCarsFragments(List<Car> cars, List<CarFragment> carFragments) {
+        CarFragment f;
+        Bundle b;
+
+        for(int i = 0; i < cars.size(); i++){
+            //init
+            f = new CarFragment();
+            b = new Bundle();
+            //arguments
+            b.putInt("INDEX", i);
+            b.putString("NAME", cars.get(i).getCarBrand());
+            f.setArguments(b);
+            //adding to collection
+            carFragments.add(f);
+        }
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
 
     }
 
@@ -174,16 +139,24 @@ public class MnActivity extends AppCompatActivity {
 
         closeFabs();
     }
+
+
     
     public void deleteCar(View v){
         replaceFragment(R.id.central_fragment, new DeleteCarFragment());
+    }
+
+    private long getMiles(int currentItem) {
+        String carName = cars.get(currentItem).getCarBrand();
+        SharedPreferences miles = getSharedPreferences("miles", Context.MODE_PRIVATE);
+        return miles.getLong(carName, 000000);
     }
 
     public void showFuelsList(View v){
         FuelsListFragment fuelsListFragment = new FuelsListFragment();
 
         Bundle b = new Bundle();
-        b.putString("name", cars.get(pager.getCurrentItem()).getCarBrand());
+        b.putString("name", cars.get(p.getCurrentItem()).getCarBrand());
         fuelsListFragment.setArguments(b);
 
         replaceFragment(R.id.central_fragment, fuelsListFragment);
@@ -196,18 +169,17 @@ public class MnActivity extends AppCompatActivity {
 
     public void showSetMileageActivity(View v){
         Intent intent = new Intent(this, SetMileageActivity.class);
-        startActivity(intent);
+        intent.putExtra("CarName", cars.get(pager.getCurrentItem()).getCarBrand());
+        startActivityForResult(intent, 1);
     }
 
-    public void setCurrentFragment(Fragment fragment){
-        Fragmentator.setCurrentFragment(fragment);
-    }
-
-    private void showFragment(Fragment f, int containerId){
-        setCurrentFragment(f);
-
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        ft.add(containerId, f).commit();
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data == null){return;}
+        int position = pager.getCurrentItem();
+        long mileage = Long.valueOf(data.getStringExtra("mileage"));
+        carFragments.get(position).setMileage(mileage);
     }
 
     public void replaceFragment(int containerId, Fragment f){
@@ -272,4 +244,55 @@ public class MnActivity extends AppCompatActivity {
             }
         }
     }
+
+    class MyBackStackChangedListener implements FragmentManager.OnBackStackChangedListener{
+        @Override
+        public void onBackStackChanged() {
+            if(fragmentManager.getBackStackEntryCount() == 0){
+                findViewById(R.id.sp_fragment).setVisibility(View.VISIBLE);
+            }else{
+                findViewById(R.id.sp_fragment).setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    class FabFuelClicked implements View.OnClickListener{
+        @Override
+        public void onClick(View view) {
+            findViewById(R.id.sp_fragment).setVisibility(View.INVISIBLE);
+            replaceFragment(R.id.central_fragment, new FuelUpFragment());
+        }
+    }
+
+    class FabRepairClicked implements View.OnClickListener{
+        @Override
+        public void onClick(View view) {
+            findViewById(R.id.sp_fragment).setVisibility(View.INVISIBLE);
+            replaceFragment(R.id.central_fragment, new ServiceFragment());
+        }
+    }
+
+    class CarsPagerListener implements ViewPager.OnPageChangeListener{
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            //trying to get mileage from shared preferences for current car
+            long miles = getMiles(pager.getCurrentItem());
+
+            //set mileage to fragment
+            carFragments.get(pager.getCurrentItem()).setMileage(miles);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    }
+
+
 }

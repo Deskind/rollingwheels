@@ -97,6 +97,18 @@ public class ExpandableRepairsListAdapter extends BaseExpandableListAdapter{
 
         TextView tvManufacturer = view.findViewById(R.id.repairs_list_item_manufacturer);
         tvManufacturer.setText(headers.get(i).getManufacturer());
+
+        //trying to set mileage after service
+        TextView tvMilesAfter = view.findViewById(R.id.repairs_list_item_miles_after);
+        long serviceMileage = headers.get(i).getMileage();
+
+        long lastUserMileage = repairsListFragment.getActivity().getSharedPreferences("miles", Context.MODE_PRIVATE).getLong(repairsListFragment.getCarName(), 0);
+        if(lastUserMileage != 0 ){
+            long mileageAfterService = lastUserMileage - serviceMileage;
+            tvMilesAfter.setText(String.valueOf(mileageAfterService));
+        }
+
+
         final Button delBtn = view.findViewById(R.id.repairs_list_item_del);
         delBtn.setTag(headers.get(i));
         delBtn.setOnClickListener(new View.OnClickListener() {

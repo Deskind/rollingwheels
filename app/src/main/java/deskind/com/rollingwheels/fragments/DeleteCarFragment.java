@@ -57,7 +57,7 @@ public class DeleteCarFragment extends Fragment {
                 Toast.makeText(getActivity(), "Car deleted ...", Toast.LENGTH_SHORT).show();
 
                 //update data in collection by clearing and adding fragments with new indexes
-                MnActivity.sliderFragments.clear();
+//                MnActivity.sliderFragments.clear();
                 List<Car> cars = DBUtility.getAppDatabase(getActivity()).getCarsDao().getAllCars();
                 if(!cars.isEmpty()) {
                     for (int i = 0; i < cars.size(); i++) {
@@ -66,7 +66,7 @@ public class DeleteCarFragment extends Fragment {
                         b.putInt("SLIDER_INDEX", i);
                         b.putString("CAR_NAME", cars.get(i).getCarBrand());
                         f.setArguments(b);
-                        MnActivity.sliderFragments.add(f);
+//                        MnActivity.sliderFragments.add(f);
                     }
                 }
 

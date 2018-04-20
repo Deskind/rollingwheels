@@ -21,7 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="--- ---"
-        android:textColor="@color/colorAccent"
+        android:textStyle="bold"
+        android:textSize="18sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/textView"
         app:layout_constraintStart_toEndOf="@+id/textView" />
 

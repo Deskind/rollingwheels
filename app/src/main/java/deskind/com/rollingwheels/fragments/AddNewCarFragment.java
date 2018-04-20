@@ -52,15 +52,15 @@ public class AddNewCarFragment extends Fragment {
                 //add new fragment to cars pager
                 CarFragment f = new CarFragment();
                 Bundle b = new Bundle();
-                b.putInt("SLIDER_INDEX", MnActivity.sliderFragments.size());
+//                b.putInt("SLIDER_INDEX", MnActivity.sliderFragments.size());
                 b.putString("CAR_NAME", userText);
                 f.setArguments(b);
 
                 //add fragment to collection
-                MnActivity.sliderFragments.add(f);
+//                MnActivity.sliderFragments.add(f);
 
                 //notify adapter
-                MnActivity.adapter.notifyDataSetChanged();
+//                MnActivity.adapter.notifyDataSetChanged();
 
 
                 //add new car to database
@@ -72,7 +72,7 @@ public class AddNewCarFragment extends Fragment {
                 getFragmentManager().popBackStackImmediate();
 
                 //move pager to newly created car
-                MnActivity.pager.setCurrentItem(MnActivity.sliderFragments.size()-1);
+//                MnActivity.pager.setCurrentItem(MnActivity.sliderFragments.size()-1);
             }
         });
 

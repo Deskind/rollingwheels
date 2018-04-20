@@ -27,6 +27,7 @@ public class RepairsListFragment extends Fragment {
     private ExpandableRepairsListAdapter adapter;
     private List<Repair> headers;
     private Map<Integer, List<String>> content;
+    String carName;
 
     public ExpandableRepairsListAdapter getAdapter() {
         return adapter;
@@ -48,7 +49,7 @@ public class RepairsListFragment extends Fragment {
     }
 
     public void prepareData(){
-        String carName = MnActivity.cars.get(MnActivity.pager.getCurrentItem()).getCarBrand();
+        carName = MnActivity.cars.get(MnActivity.pager.getCurrentItem()).getCarBrand();
         headers = DBUtility.getAppDatabase(context).getCarsDao().getAllRapairsForBrand(carName);
         content = new HashMap<>();
 
@@ -60,5 +61,9 @@ public class RepairsListFragment extends Fragment {
 
         adapter = new ExpandableRepairsListAdapter(context, headers, content, this);
         elvRepairsList.setAdapter(adapter);
+    }
+
+    public String getCarName() {
+        return carName;
     }
 }

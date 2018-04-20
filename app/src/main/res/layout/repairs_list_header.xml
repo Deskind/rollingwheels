@@ -65,11 +65,11 @@
         android:layout_marginEnd="24dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        android:textSize="18sp"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/repairs_list_header_mileage"
-        app:layout_constraintTop_toBottomOf="@+id/repairs_list_divider"
-        android:textStyle="bold"/>
+        app:layout_constraintTop_toBottomOf="@+id/repairs_list_divider" />
 
 </android.support.constraint.ConstraintLayout>

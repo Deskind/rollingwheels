@@ -48,7 +48,6 @@ public class ServiceFragment extends Fragment {
 
         //find views
         serviceDate = getView().findViewById(R.id.service_date);
-        Log.i("DDD", serviceDate.getText().toString());
         mileage = getView().findViewById(R.id.service_mileage);
         partManufacturer = getView().findViewById(R.id.part_manufacturer);
         description = getView().findViewById(R.id.service_description);
