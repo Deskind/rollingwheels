@@ -11,7 +11,7 @@ import deskind.com.rollingwheels.entities.FuelUp;
 import deskind.com.rollingwheels.entities.Repair;
 
 
-@Database(version = 1, entities = {Car.class, FuelUp.class, Repair.class, FluidService.class, FilterService.class})
+@Database(version = 2, entities = {Car.class, FuelUp.class, Repair.class, FluidService.class, FilterService.class})
 public abstract class AppDatabase extends RoomDatabase {
 abstract public CarsDAO getCarsDao();
 }

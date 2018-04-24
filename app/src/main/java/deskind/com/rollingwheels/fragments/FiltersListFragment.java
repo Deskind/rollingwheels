@@ -9,40 +9,41 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import deskind.com.rollingwheels.R;
 import deskind.com.rollingwheels.activities.MnActivity;
-import deskind.com.rollingwheels.adapters.ExpandableRepairsListAdapter;
+import deskind.com.rollingwheels.adapters.ExpandableFiltersListAdapter;
 import deskind.com.rollingwheels.database.DBUtility;
-import deskind.com.rollingwheels.entities.Repair;
+import deskind.com.rollingwheels.entities.FilterService;
 
-public class RepairsListFragment extends Fragment {
-
-    private ExpandableListView elvRepairsList;
+public class FiltersListFragment extends Fragment{
+    private ExpandableListView elvFiltersList;
     private Context context;
-    private ExpandableRepairsListAdapter adapter;
-    private List<Repair> headers;
+    private ExpandableFiltersListAdapter adapter;
+    private List<FilterService> headers;
     private Map<Integer, List<String>> content;
     String carName;
 
-    public ExpandableRepairsListAdapter getAdapter() {
+    public ExpandableFiltersListAdapter getAdapter() {
         return adapter;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.repairs_list, container, false);
+        return inflater.inflate(R.layout.filters_list, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        elvRepairsList = view.findViewById(R.id.elv_repairs_list);
+        elvFiltersList = view.findViewById(R.id.elv_filters_list);
         context = getActivity();
         prepareData();
     }
@@ -50,20 +51,21 @@ public class RepairsListFragment extends Fragment {
     public void prepareData(){
         ViewPager pager = ((MnActivity)getActivity()).getPager();
         carName = MnActivity.cars.get(pager.getCurrentItem()).getCarBrand();
-        headers = DBUtility.getAppDatabase(context).getCarsDao().getAllRapairsForBrand(carName);
+        headers = DBUtility.getAppDatabase(context).getCarsDao().getAllFilterServices(carName);
         content = new HashMap<>();
 
-        for(Repair r : headers){
+        for(FilterService s : headers){
             ArrayList<String> list = new ArrayList<>();
-            list.add(r.getManufacturer());
-            content.put(r.getRepairId(), list);
+            list.add(s.getFilterBrand());
+            content.put(s.getServiceId(), list);
         }
 
-        adapter = new ExpandableRepairsListAdapter(context, headers, content, this);
-        elvRepairsList.setAdapter(adapter);
+        adapter = new ExpandableFiltersListAdapter(context, headers, content, this);
+        elvFiltersList.setAdapter(adapter);
     }
 
     public String getCarName() {
         return carName;
     }
 }
+

@@ -24,8 +24,8 @@ public class FilterService {
     @ColumnInfo(name = "mileage")
     public long mileage;
 
-    @ColumnInfo(name = "fluid_brand")
-    public String fluidBrand;
+    @ColumnInfo(name = "filter_brand")
+    public String filterBrand;
 
     @ColumnInfo(name = "price")
     public int price;
@@ -34,11 +34,11 @@ public class FilterService {
     public String description;
 
 
-    public FilterService(String carBrand,String date, long mileage, String fluidBrand, int price, String description) {
+    public FilterService(String carBrand,String date, long mileage, String filterBrand, int price, String description) {
         this.carBrand = carBrand;
         this.date = date;
         this.mileage = mileage;
-        this.fluidBrand = fluidBrand;
+        this.filterBrand = filterBrand;
         this.price = price;
         this.description = description;
     }
@@ -57,8 +57,8 @@ public class FilterService {
         this.mileage = mileage;
     }
 
-    public void setFilterBrand(String fluidBrand) {
-        this.fluidBrand = fluidBrand;
+    public void setFilterBrand(String filterBrand) {
+        this.filterBrand = filterBrand;
     }
 
     public void setPrice(int price) {
@@ -85,8 +85,8 @@ public class FilterService {
         return mileage;
     }
 
-    public String getFluidBrand() {
-        return fluidBrand;
+    public String getFilterBrand() {
+        return filterBrand;
     }
 
     public int getPrice() {

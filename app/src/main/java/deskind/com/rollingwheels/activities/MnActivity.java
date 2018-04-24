@@ -10,23 +10,30 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 import deskind.com.rollingwheels.Fragmentator;
 import deskind.com.rollingwheels.R;
-import deskind.com.rollingwheels.SpendingsCalculator;
 import deskind.com.rollingwheels.adapters.CarsPagerAdapter;
+import deskind.com.rollingwheels.dao.CarsDAO;
 import deskind.com.rollingwheels.database.AppDatabase;
 import deskind.com.rollingwheels.database.DBUtility;
 import deskind.com.rollingwheels.entities.Car;
+import deskind.com.rollingwheels.entities.FilterService;
+import deskind.com.rollingwheels.entities.FluidService;
+import deskind.com.rollingwheels.entities.Repair;
 import deskind.com.rollingwheels.fragments.AddNewCarFragment;
 import deskind.com.rollingwheels.fragments.CarFragment;
 import deskind.com.rollingwheels.fragments.DeleteCarFragment;
+import deskind.com.rollingwheels.fragments.FiltersListFragment;
+import deskind.com.rollingwheels.fragments.FluidsListFragment;
 import deskind.com.rollingwheels.fragments.FuelUpFragment;
 import deskind.com.rollingwheels.fragments.FuelsListFragment;
 import deskind.com.rollingwheels.fragments.RepairsListFragment;
@@ -34,41 +41,61 @@ import deskind.com.rollingwheels.fragments.ServiceFragment;
 import deskind.com.rollingwheels.fragments.SpendingsFragment;
 
 
-public class MnActivity extends AppCompatActivity {
+public class MnActivity extends FragmentActivity {
 
     private FloatingActionButton fabPlus, fabFuel, fabRepair, fabFluid, fabFilter;
     private  Animation open, close, clockwise, anticlockwise;
 
+    //fabs open or close flag
     private static boolean isFabOpen = false;
 
     private ViewPager p;
     //temp pager reference
-    public static ViewPager pager;
+    private ViewPager pager;
+
+    private CarsPagerAdapter carsAdapter;
 
     public static List<Car> cars;
 
-    private static SpendingsCalculator calculator;
-    
     private FragmentManager fragmentManager;
-    SpendingsFragment spendingsFragment;
+    private SpendingsFragment spendingsFragment;
 
     private List<CarFragment> carFragments;
 
     private RepairsListFragment repairsListFragment;
+    private FluidsListFragment fluidsListFragment;
+    private FiltersListFragment filtersListFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_const);
 
+        Log.i("Create","Called");
         //init
         AppDatabase database = DBUtility.getAppDatabase(this);
+
+        p = findViewById(R.id.pager);
+        //init temp
+        pager = p;
+
         fragmentManager = getSupportFragmentManager();
 
+        fabPlus = findViewById(R.id.fab_plus);
         fabFuel = findViewById(R.id.fab_fuel);
         fabRepair = findViewById(R.id.fab_repair);
+        fabFluid = findViewById(R.id.fab_fluid);
+        fabFilter = findViewById(R.id.fab_filter);
+
+        //load animations
+        open = getAnimation(R.anim.fab_open, this);
+        close = getAnimation(R.anim.fab_close, this);
+        clockwise = getAnimation(R.anim.rotate_clockwise, this);
+        anticlockwise = getAnimation(R.anim.rotate_anticlockwise, this);
 
         //listeners
+        fabPlus.setOnClickListener(new FabPlusClicked());
+
         fragmentManager.addOnBackStackChangedListener(new MyBackStackChangedListener());
         fabFuel.setOnClickListener(new FabFuelClicked());
         fabRepair.setOnClickListener(new FabRepairClicked());
@@ -83,12 +110,9 @@ public class MnActivity extends AppCompatActivity {
         createCarsFragments(cars, carFragments);
 
         //create adapter for slider
-        CarsPagerAdapter carsAdapter = new CarsPagerAdapter(getSupportFragmentManager(), carFragments);
+        carsAdapter = new CarsPagerAdapter(getSupportFragmentManager(), carFragments);
 
         //set adapter to pager
-        p = findViewById(R.id.pager);
-        //init temp
-        pager = p;
         p.setAdapter(carsAdapter);
 
         pager.setOnPageChangeListener(new CarsPagerListener());
@@ -97,6 +121,39 @@ public class MnActivity extends AppCompatActivity {
         if(fragmentManager.getBackStackEntryCount() != 0){
             findViewById(R.id.sp_fragment).setVisibility(View.INVISIBLE);
         }
+
+        //close fabs
+        closeFabs();
+
+        //calcutate spendings for first element in slider if such exists
+        if(!cars.isEmpty()) {
+            spendingsFragment = (SpendingsFragment)fragmentManager.findFragmentById(R.id.sp_fragment);
+            spendingsFragment.setSpendings(0);
+        }else{
+            replaceFragment(R.id.central_fragment, new AddNewCarFragment());
+            Toast.makeText(this, "Add a car ...", Toast.LENGTH_LONG).show();
+        }
+
+
+
+    }
+
+
+
+    public List<CarFragment> getSliderFragments() {
+        return carFragments;
+    }
+
+    public PagerAdapter getPagerAdapter(){
+        return carsAdapter;
+    }
+
+    public ViewPager getPager(){
+        return pager;
+    }
+
+    public SpendingsFragment getSpendingsFragment(){
+        return spendingsFragment;
     }
 
     //methods fills list of fragments based on cars list
@@ -124,15 +181,36 @@ public class MnActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i("Stop", "CALLED");
+    }
+
     public void addNewCar(View v){
         replaceFragment(R.id.central_fragment, new AddNewCarFragment());
     }
 
     public void addNewService(View v){
+        String serviceType = "";
+        int viewId = v.getId();
+
+        switch (viewId){
+            case R.id.fab_repair:
+                serviceType = "repair";
+                break;
+            case R.id.fab_fluid:
+                serviceType = "fluid";
+                break;
+            case R.id.fab_filter:
+                serviceType = "filter";
+                break;
+        }
+
         ServiceFragment f = new ServiceFragment();
 
         Bundle b = new Bundle();
-        b.putString("type", "repair");
+        b.putString("type", serviceType);
         f.setArguments(b);
 
         replaceFragment(R.id.central_fragment, f);
@@ -149,7 +227,7 @@ public class MnActivity extends AppCompatActivity {
     private long getMiles(int currentItem) {
         String carName = cars.get(currentItem).getCarBrand();
         SharedPreferences miles = getSharedPreferences("miles", Context.MODE_PRIVATE);
-        return miles.getLong(carName, 000000);
+        return miles.getLong(carName, 0);
     }
 
     public void showFuelsList(View v){
@@ -165,6 +243,16 @@ public class MnActivity extends AppCompatActivity {
     public void showRepairsList(View v){
         repairsListFragment = new RepairsListFragment();
         replaceFragment(R.id.central_fragment, repairsListFragment);
+    }
+
+    public void showFluidsList(View v){
+        fluidsListFragment = new FluidsListFragment();
+        replaceFragment(R.id.central_fragment, fluidsListFragment);
+    }
+
+    public void showFiltersList(View v){
+        filtersListFragment = new FiltersListFragment();
+        replaceFragment(R.id.central_fragment, filtersListFragment);
     }
 
     public void showSetMileageActivity(View v){
@@ -195,7 +283,7 @@ public class MnActivity extends AppCompatActivity {
         return AnimationUtils.loadAnimation(context, animId);
     }
 
-    private void closeFabs(){
+    public void closeFabs(){
         fabPlus.startAnimation(anticlockwise);
         fabFuel.startAnimation(close);
         fabFuel.setClickable(false);
@@ -223,16 +311,9 @@ public class MnActivity extends AppCompatActivity {
         isFabOpen = true;
     }
 
-    //INNER CLASSES
-    //Fabs click listeners
-    class OnFabClicked implements View.OnClickListener{
-        @Override
-        public void onClick(View view) {
-            replaceFragment(R.id.central_fragment, (Fragment) view.getTag());
-            closeFabs();
-        }
-    }
 
+
+    //INNER CLASSES
     //inner classes
     class FabPlusClicked implements View.OnClickListener{
         @Override
@@ -253,6 +334,15 @@ public class MnActivity extends AppCompatActivity {
             }else{
                 findViewById(R.id.sp_fragment).setVisibility(View.INVISIBLE);
             }
+
+            if(!cars.isEmpty()) {
+                if(spendingsFragment == null){
+                    spendingsFragment = new SpendingsFragment();
+                    spendingsFragment.setSpendings(pager.getCurrentItem());
+                }else{
+                    spendingsFragment.setSpendings(pager.getCurrentItem());
+                }
+            }
         }
     }
 
@@ -261,6 +351,9 @@ public class MnActivity extends AppCompatActivity {
         public void onClick(View view) {
             findViewById(R.id.sp_fragment).setVisibility(View.INVISIBLE);
             replaceFragment(R.id.central_fragment, new FuelUpFragment());
+
+            //hide fabs
+            closeFabs();
         }
     }
 
@@ -281,11 +374,8 @@ public class MnActivity extends AppCompatActivity {
 
         @Override
         public void onPageSelected(int position) {
-            //trying to get mileage from shared preferences for current car
-            long miles = getMiles(pager.getCurrentItem());
-
-            //set mileage to fragment
-            carFragments.get(pager.getCurrentItem()).setMileage(miles);
+            //calculate fuel spendings for car
+            spendingsFragment.setSpendings(pager.getCurrentItem());
         }
 
         @Override

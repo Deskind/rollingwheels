@@ -39,18 +39,20 @@ public class CarFragment extends Fragment {
 
         carName = view.findViewById(R.id.tv_car_name);
         carMileage = view.findViewById(R.id.tv_car_mileage);
-        Log.i("CREATED", "YES");
 
         String name = getArguments().getString("NAME");
         index = getArguments().getInt("INDEX");
 
-        if(index == 0 && initialFragment == true){
-            SharedPreferences miles = getActivity().getSharedPreferences("miles", Context.MODE_PRIVATE);
-            carName.setText(name);
-            setMileage(miles.getLong(name, 0));
-            initialFragment = false;
-            return;
-        }
+//        if(index == 0 && initialFragment == true){
+//            SharedPreferences miles = getActivity().getSharedPreferences("miles", Context.MODE_PRIVATE);
+//            carName.setText(name);
+//            setMileage(miles.getLong(name, 0));
+//            initialFragment = false;
+//            return;
+//        }
+        SharedPreferences miles = getActivity().getSharedPreferences("miles", Context.MODE_PRIVATE);
+        carName.setText(name);
+        setMileage(miles.getLong(name, 0));
 
         carName.setText(name);
     }

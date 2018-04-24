@@ -3,6 +3,7 @@ package deskind.com.rollingwheels.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,9 @@ public class AddNewCarFragment extends Fragment {
                 boolean isCarExists;
                 String userText = etName.getText().toString();
 
+                //get reference to activity
+                MnActivity activity = (MnActivity)getActivity();
+
                 //if user text is empty
                 if(userText.isEmpty()) {
                     Toast.makeText(getActivity(), "Name can't be empty ...", Toast.LENGTH_SHORT).show();
@@ -46,22 +50,21 @@ public class AddNewCarFragment extends Fragment {
                     }
                 }
 
+                //create new fragment
+                CarFragment f = new CarFragment();
+                Bundle b = new Bundle();
+                b.putInt("INDEX", activity.getSliderFragments().size());
+                b.putString("NAME", userText);
+                f.setArguments(b);
+
                 //add car to collection
                 MnActivity.cars.add(new Car(userText));
 
-                //add new fragment to cars pager
-                CarFragment f = new CarFragment();
-                Bundle b = new Bundle();
-//                b.putInt("SLIDER_INDEX", MnActivity.sliderFragments.size());
-                b.putString("CAR_NAME", userText);
-                f.setArguments(b);
-
                 //add fragment to collection
-//                MnActivity.sliderFragments.add(f);
+                activity.getSliderFragments().add(f);
 
                 //notify adapter
-//                MnActivity.adapter.notifyDataSetChanged();
-
+                activity.getPagerAdapter().notifyDataSetChanged();
 
                 //add new car to database
                 DBUtility.getAppDatabase(getActivity()).getCarsDao().insertNewCar(new Car(userText));
@@ -72,7 +75,7 @@ public class AddNewCarFragment extends Fragment {
                 getFragmentManager().popBackStackImmediate();
 
                 //move pager to newly created car
-//                MnActivity.pager.setCurrentItem(MnActivity.sliderFragments.size()-1);
+                activity.getPager().setCurrentItem(activity.getSliderFragments().size()-1);
             }
         });
 

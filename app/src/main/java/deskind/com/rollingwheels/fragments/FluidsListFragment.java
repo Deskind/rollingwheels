@@ -9,40 +9,43 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import deskind.com.rollingwheels.R;
 import deskind.com.rollingwheels.activities.MnActivity;
+import deskind.com.rollingwheels.adapters.ExpandableFluidsListAdapter;
 import deskind.com.rollingwheels.adapters.ExpandableRepairsListAdapter;
 import deskind.com.rollingwheels.database.DBUtility;
+import deskind.com.rollingwheels.entities.FluidService;
 import deskind.com.rollingwheels.entities.Repair;
 
-public class RepairsListFragment extends Fragment {
-
+public class FluidsListFragment extends Fragment{
     private ExpandableListView elvRepairsList;
     private Context context;
-    private ExpandableRepairsListAdapter adapter;
-    private List<Repair> headers;
+    private ExpandableFluidsListAdapter adapter;
+    private List<FluidService> headers;
     private Map<Integer, List<String>> content;
     String carName;
 
-    public ExpandableRepairsListAdapter getAdapter() {
+    public ExpandableFluidsListAdapter getAdapter() {
         return adapter;
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.repairs_list, container, false);
+        return inflater.inflate(R.layout.fluids_list, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        elvRepairsList = view.findViewById(R.id.elv_repairs_list);
+        elvRepairsList = view.findViewById(R.id.elv_fluids_list);
         context = getActivity();
         prepareData();
     }
@@ -50,16 +53,16 @@ public class RepairsListFragment extends Fragment {
     public void prepareData(){
         ViewPager pager = ((MnActivity)getActivity()).getPager();
         carName = MnActivity.cars.get(pager.getCurrentItem()).getCarBrand();
-        headers = DBUtility.getAppDatabase(context).getCarsDao().getAllRapairsForBrand(carName);
+        headers = DBUtility.getAppDatabase(context).getCarsDao().getAllFluidServices(carName);
         content = new HashMap<>();
 
-        for(Repair r : headers){
+        for(FluidService s : headers){
             ArrayList<String> list = new ArrayList<>();
-            list.add(r.getManufacturer());
-            content.put(r.getRepairId(), list);
+            list.add(s.getFluidBrand());
+            content.put(s.getServiceId(), list);
         }
 
-        adapter = new ExpandableRepairsListAdapter(context, headers, content, this);
+        adapter = new ExpandableFluidsListAdapter(context, headers, content, this);
         elvRepairsList.setAdapter(adapter);
     }
 

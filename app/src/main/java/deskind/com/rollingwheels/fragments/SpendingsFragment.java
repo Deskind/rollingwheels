@@ -19,7 +19,7 @@ import deskind.com.rollingwheels.activities.MnActivity;
 
 public class SpendingsFragment extends Fragment {
     public static SpendingsCalculator calculator = new SpendingsCalculator();
-    public static TextView tvFuel, tvRepairs,tvFluids, tvFilters, fuelSpendings, repairsSpendings, fluidsSpendings, filtersSpendings;
+    public static TextView fuelSpendings, repairsSpendings, fluidsSpendings, filtersSpendings;
     public static ImageView ivFuelList, ivRepairsList, ivFluidsList, ivFiltersList;
 
     private static Context context;
@@ -37,16 +37,16 @@ public class SpendingsFragment extends Fragment {
         context = getActivity();
         fuelSpendings = getView().findViewById(R.id.fuel_spendings);
         repairsSpendings = getView().findViewById(R.id.repairs_spendings);
+        fluidsSpendings = getView().findViewById(R.id.fluids_spendings);
+        filtersSpendings = getView().findViewById(R.id.filters_spendings);
 
-        setFuelUpSpendings();
-        setRepairSpendings();
     }
 
-    public static void setFuelUpSpendings (){
-//        fuelSpendings.setText(String.format("%.1f", calculator.calcFuelSpendings(context, MnActivity.pager.getCurrentItem())));
+    public void setSpendings (int currentItem){
+        fuelSpendings.setText(String.format("%.1f", calculator.calcFuelSpendings(context, currentItem)));
+        repairsSpendings.setText(String.valueOf(calculator.calcRepairSpendings(context, currentItem)));
+        fluidsSpendings.setText(String.valueOf(calculator.calcFluidsSpendings(context, currentItem)));
+        filtersSpendings.setText(String.valueOf(calculator.calcFiltersSpendings(context, currentItem)));
     }
 
-    public static void setRepairSpendings() {
-//        repairsSpendings.setText(String.valueOf(calculator.calcRepairSpendings(context, MnActivity.pager.getCurrentItem())));
-    }
 }

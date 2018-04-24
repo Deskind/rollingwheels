@@ -127,7 +127,6 @@ public class FuelUpFragment extends Fragment {
             Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();
 
             getActivity().getSupportFragmentManager().popBackStackImmediate();
-            Fragmentator.setCurrentFragment(null);
         }
 
     }

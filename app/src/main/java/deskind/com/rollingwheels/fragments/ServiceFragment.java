@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,8 @@ import deskind.com.rollingwheels.R;
 import deskind.com.rollingwheels.activities.MnActivity;
 import deskind.com.rollingwheels.dao.CarsDAO;
 import deskind.com.rollingwheels.database.DBUtility;
+import deskind.com.rollingwheels.entities.FilterService;
+import deskind.com.rollingwheels.entities.FluidService;
 import deskind.com.rollingwheels.entities.Repair;
 
 public class ServiceFragment extends Fragment {
@@ -65,6 +68,7 @@ public class ServiceFragment extends Fragment {
         serviceDone.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                ViewPager pager = ((MnActivity)getActivity()).getPager();
                 final String sDate = serviceDate.getText().toString();
                 final String sMileage = mileage.getText().toString();
                 final String sManufacturer = partManufacturer.getText().toString();
@@ -73,7 +77,7 @@ public class ServiceFragment extends Fragment {
 
                 CarsDAO carsDao = DBUtility.getAppDatabase(context).getCarsDao();
                 String serviceType = getArguments().getString("type");
-                String carName = MnActivity.cars.get(MnActivity.pager.getCurrentItem()).getCarBrand();
+                String carName = MnActivity.cars.get(pager.getCurrentItem()).getCarBrand();
 
                 if(sMileage.equals("")|
                    sManufacturer.equals("")|
@@ -88,9 +92,24 @@ public class ServiceFragment extends Fragment {
                                 sManufacturer,
                                 sDescription,
                                 Integer.valueOf(sPrice)));
-
-                        Toast.makeText(context, "Done ...", Toast.LENGTH_SHORT).show();
+                    }else if(serviceType.equals("fluid")){
+                        carsDao.insertFluidService(new FluidService(carName,
+                                sDate,
+                                Long.valueOf(sMileage),
+                                sManufacturer,
+                                Integer.valueOf(sPrice),
+                                sDescription));
+                    }else if(serviceType.equals("filter")){
+                        carsDao.insertFilterService(new FilterService(carName,
+                                sDate,
+                                Long.valueOf(sMileage),
+                                sManufacturer,
+                                Integer.valueOf(sPrice),
+                                sDescription));
                     }
+                    Toast.makeText(context, "Done ...", Toast.LENGTH_SHORT).show();
+                    ((MnActivity)getActivity()).getSpendingsFragment().setSpendings(pager.getCurrentItem());
+                    closeFragment();
                 }
 
 
@@ -106,8 +125,8 @@ public class ServiceFragment extends Fragment {
         serviceDate.setText(date);
     }
 
-    public void setDate(String s){
-
+    public void closeFragment(){
+        getFragmentManager().popBackStackImmediate();
     }
 
     private void showDateDialog() {

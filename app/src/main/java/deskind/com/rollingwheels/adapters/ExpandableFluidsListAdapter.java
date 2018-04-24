@@ -8,21 +8,24 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.List;
 import java.util.Map;
+
 import deskind.com.rollingwheels.R;
 import deskind.com.rollingwheels.database.DBUtility;
+import deskind.com.rollingwheels.entities.FluidService;
 import deskind.com.rollingwheels.entities.Repair;
+import deskind.com.rollingwheels.fragments.FluidsListFragment;
 import deskind.com.rollingwheels.fragments.RepairsListFragment;
 
-public class ExpandableRepairsListAdapter extends BaseExpandableListAdapter{
-
+public class ExpandableFluidsListAdapter extends BaseExpandableListAdapter{
     private Context context;
-    private List<Repair> headers;
+    private List<FluidService> headers;
     private Map<Integer, List<String>> content;
-    private RepairsListFragment repairsListFragment;
+    private FluidsListFragment repairsListFragment;
 
-    public ExpandableRepairsListAdapter(Context context, List<Repair> headers, Map<Integer, List<String>> content, RepairsListFragment repairsListFragment) {
+    public ExpandableFluidsListAdapter(Context context, List<FluidService> headers, Map<Integer, List<String>> content, FluidsListFragment repairsListFragment) {
         this.context = context;
         this.headers = headers;
         this.content = content;
@@ -36,7 +39,7 @@ public class ExpandableRepairsListAdapter extends BaseExpandableListAdapter{
 
     @Override
     public int getChildrenCount(int i) {
-        return content.get(headers.get(i).getRepairId()).size();
+        return content.get(headers.get(i).getServiceId()).size();
     }
 
     @Override
@@ -46,7 +49,7 @@ public class ExpandableRepairsListAdapter extends BaseExpandableListAdapter{
 
     @Override
     public Object getChild(int i, int i1) {
-        return content.get(headers.get(i).getRepairId()).get(i1);
+        return content.get(headers.get(i).getServiceId()).get(i1);
     }
 
     @Override
@@ -78,7 +81,7 @@ public class ExpandableRepairsListAdapter extends BaseExpandableListAdapter{
         TextView tvMileage = view.findViewById(R.id.repairs_list_header_mileage);
         tvMileage.setText(String.valueOf(headers.get(i).getMileage()));
         TextView tvPrice = view.findViewById(R.id.repairs_list_header_price);
-        tvPrice.setText(String.valueOf(headers.get(i).getPartPrice()));
+        tvPrice.setText(String.valueOf(headers.get(i).getPrice()));
         TextView tvDescription = view.findViewById(R.id.repairs_list_header_description);
         tvDescription.setText(headers.get(i).getDescription());
 
@@ -94,7 +97,7 @@ public class ExpandableRepairsListAdapter extends BaseExpandableListAdapter{
         }
 
         TextView tvManufacturer = view.findViewById(R.id.repairs_list_item_manufacturer);
-        tvManufacturer.setText(headers.get(i).getManufacturer());
+        tvManufacturer.setText(headers.get(i).getFluidBrand());
 
         //trying to set mileage after service
         TextView tvMilesAfter = view.findViewById(R.id.repairs_list_item_miles_after);

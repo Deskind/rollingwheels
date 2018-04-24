@@ -59,7 +59,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/seven"
+        android:text="0"
         android:textAlignment="center"
         android:textSize="32sp"
         app:layout_constraintEnd_toStartOf="@+id/iv_fuels_list"
@@ -72,7 +72,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/seven"
+        android:text="0"
         android:textAlignment="center"
         android:textSize="32sp"
         app:layout_constraintEnd_toStartOf="@+id/iv_repairs_list"
@@ -85,7 +85,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/seven"
+        android:text="0"
         android:textAlignment="center"
         android:textSize="32sp"
         app:layout_constraintEnd_toStartOf="@+id/iv_fluids_list"
@@ -98,7 +98,7 @@
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/seven"
+        android:text="0"
         android:textAlignment="center"
         android:textSize="32sp"
         app:layout_constraintEnd_toStartOf="@+id/iv_filters_list"
@@ -112,13 +112,14 @@
         android:layout_width="35dp"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"
+        android:background="@drawable/transparent_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/fuel_spendings"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_sort_by_size"
-        android:onClick="showFuelsList"/>
+        android:src="@android:drawable/ic_menu_sort_by_size"
+        android:onClick="showFuelsList"
+        />
 
 
     <ImageButton
@@ -126,12 +127,12 @@
         android:layout_width="35dp"
         android:layout_height="40dp"
         android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"
+        android:background="@drawable/transparent_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/repairs_spendings"
         app:layout_constraintTop_toBottomOf="@+id/iv_fuels_list"
-        app:srcCompat="@android:drawable/ic_menu_sort_by_size"
+        android:src="@android:drawable/ic_menu_sort_by_size"
         android:onClick="showRepairsList"/>
 
     <ImageButton
@@ -139,22 +140,24 @@
         android:layout_width="35dp"
         android:layout_height="40dp"
         android:layout_marginTop="24dp"
-        android:background="@android:color/transparent"
+        android:background="@drawable/transparent_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/fluids_spendings"
         app:layout_constraintTop_toBottomOf="@+id/iv_repairs_list"
-        app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+        android:src="@android:drawable/ic_menu_sort_by_size"
+        android:onClick="showFluidsList"/>
 
     <ImageButton
         android:id="@+id/iv_filters_list"
         android:layout_width="35dp"
         android:layout_height="40dp"
         android:layout_marginTop="20dp"
-        android:background="@android:color/transparent"
+        android:background="@drawable/transparent_white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/filters_spendings"
         app:layout_constraintTop_toBottomOf="@+id/iv_fluids_list"
-        app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+        android:src="@android:drawable/ic_menu_sort_by_size"
+        android:onClick="showFiltersList"/>
 </android.support.constraint.ConstraintLayout>
