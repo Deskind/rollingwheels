@@ -49,6 +49,9 @@ public class MnActivity extends FragmentActivity {
     //fabs open or close flag
     private static boolean isFabOpen = false;
 
+    //currency token
+    private String currencyToken = "";
+
     private ViewPager p;
     //temp pager reference
     private ViewPager pager;
