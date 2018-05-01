@@ -3,6 +3,7 @@ package deskind.com.rollingwheels.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -35,7 +36,9 @@ public class RepairsListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.repairs_list, container, false);
+        View v = inflater.inflate(R.layout.repairs_list, container, false);
+
+        return v;
     }
 
     @Override
@@ -44,6 +47,7 @@ public class RepairsListFragment extends Fragment {
 
         elvRepairsList = view.findViewById(R.id.elv_repairs_list);
         context = getActivity();
+
         prepareData();
     }
 

@@ -18,9 +18,9 @@ import deskind.com.rollingwheels.SpendingsCalculator;
 import deskind.com.rollingwheels.activities.MnActivity;
 
 public class SpendingsFragment extends Fragment {
-    public static SpendingsCalculator calculator = new SpendingsCalculator();
-    public static TextView fuelSpendings, repairsSpendings, fluidsSpendings, filtersSpendings;
-    public static ImageView ivFuelList, ivRepairsList, ivFluidsList, ivFiltersList;
+    public SpendingsCalculator calculator = new SpendingsCalculator();
+    public TextView fuelSpendings, repairsSpendings, fluidsSpendings, filtersSpendings;
+    public ImageView ivFuelList, ivRepairsList, ivFluidsList, ivFiltersList;
 
     private static Context context;
 
@@ -43,7 +43,8 @@ public class SpendingsFragment extends Fragment {
     }
 
     public void setSpendings (int currentItem){
-        fuelSpendings.setText(String.format("%.1f", calculator.calcFuelSpendings(context, currentItem)));
+
+        fuelSpendings.setText(String.valueOf(calculator.calcFuelSpendings(context, currentItem)));
         repairsSpendings.setText(String.valueOf(calculator.calcRepairSpendings(context, currentItem)));
         fluidsSpendings.setText(String.valueOf(calculator.calcFluidsSpendings(context, currentItem)));
         filtersSpendings.setText(String.valueOf(calculator.calcFiltersSpendings(context, currentItem)));

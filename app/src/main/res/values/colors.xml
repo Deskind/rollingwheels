@@ -11,4 +11,5 @@
     <color name="red_primary">#d50000</color>
     <color name="hint_grey_light">#cfcfcf</color>
     <color name="teal">#26a69a</color>
+    <color name="indigo_dark">#1A237E</color>
 </resources>

@@ -9,22 +9,28 @@
 
     <TextView
         android:id="@+id/tv_fuel"
-        android:layout_width="110dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:onClick="showFuelsList"
         android:text="@string/fuel"
         android:textSize="32sp"
+        android:padding="5dp"
+        android:background="@drawable/transparent_white"
         app:layout_constraintEnd_toStartOf="@+id/fuel_spendings"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_repair"
-        android:layout_width="110dp"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:onClick="showRepairsList"
         android:text="@string/repairs_label"
+        android:background="@drawable/transparent_white"
         android:textSize="32sp"
+        android:padding="5dp"
         app:layout_constraintEnd_toStartOf="@+id/repairs_spendings"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,8 +41,11 @@
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:onClick="showFluidsList"
         android:text="@string/fluids"
+        android:background="@drawable/transparent_white"
         android:textSize="32sp"
+        android:padding="5dp"
         app:layout_constraintEnd_toStartOf="@+id/fluids_spendings"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,8 +56,11 @@
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:onClick="showFiltersList"
         android:text="@string/filters"
+        android:background="@drawable/transparent_white"
         android:textSize="32sp"
+        android:padding="5dp"
         app:layout_constraintEnd_toStartOf="@+id/filters_spendings"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,108 +68,51 @@
 
     <TextView
         android:id="@+id/fuel_spendings"
-        android:layout_width="100dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="0"
         android:textAlignment="center"
         android:textSize="32sp"
-        app:layout_constraintEnd_toStartOf="@+id/iv_fuels_list"
+
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_fuel"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tv_fuel"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/tv_fuel" />
 
     <TextView
         android:id="@+id/repairs_spendings"
-        android:layout_width="100dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="0"
         android:textAlignment="center"
         android:textSize="32sp"
-        app:layout_constraintEnd_toStartOf="@+id/iv_repairs_list"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_repair"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tv_repair"
-        app:layout_constraintTop_toBottomOf="@+id/fuel_spendings" />
+        app:layout_constraintStart_toEndOf="@+id/tv_repair" />
 
     <TextView
         android:id="@+id/fluids_spendings"
-        android:layout_width="100dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="0"
         android:textAlignment="center"
         android:textSize="32sp"
-        app:layout_constraintEnd_toStartOf="@+id/iv_fluids_list"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_fluids"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tv_fluids"
-        app:layout_constraintTop_toBottomOf="@+id/repairs_spendings" />
+        app:layout_constraintStart_toEndOf="@+id/tv_fluids" />
 
     <TextView
         android:id="@+id/filters_spendings"
-        android:layout_width="100dp"
+        android:layout_width="130dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="0"
         android:textAlignment="center"
         android:textSize="32sp"
-        app:layout_constraintEnd_toStartOf="@+id/iv_filters_list"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tv_filters"
-        app:layout_constraintTop_toBottomOf="@+id/fluids_spendings" />
-
-
-    <ImageButton
-        android:id="@+id/iv_fuels_list"
-        android:layout_width="35dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/transparent_white"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tv_filters"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/fuel_spendings"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@android:drawable/ic_menu_sort_by_size"
-        android:onClick="showFuelsList"
-        />
+        app:layout_constraintStart_toEndOf="@+id/tv_filters" />
 
-
-    <ImageButton
-        android:id="@+id/iv_repairs_list"
-        android:layout_width="35dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/transparent_white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/repairs_spendings"
-        app:layout_constraintTop_toBottomOf="@+id/iv_fuels_list"
-        android:src="@android:drawable/ic_menu_sort_by_size"
-        android:onClick="showRepairsList"/>
-
-    <ImageButton
-        android:id="@+id/iv_fluids_list"
-        android:layout_width="35dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/transparent_white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/fluids_spendings"
-        app:layout_constraintTop_toBottomOf="@+id/iv_repairs_list"
-        android:src="@android:drawable/ic_menu_sort_by_size"
-        android:onClick="showFluidsList"/>
-
-    <ImageButton
-        android:id="@+id/iv_filters_list"
-        android:layout_width="35dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/transparent_white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/filters_spendings"
-        app:layout_constraintTop_toBottomOf="@+id/iv_fluids_list"
-        android:src="@android:drawable/ic_menu_sort_by_size"
-        android:onClick="showFiltersList"/>
 </android.support.constraint.ConstraintLayout>

@@ -4,18 +4,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +36,7 @@ import deskind.com.rollingwheels.entities.FluidService;
 import deskind.com.rollingwheels.entities.Repair;
 import deskind.com.rollingwheels.fragments.AddNewCarFragment;
 import deskind.com.rollingwheels.fragments.CarFragment;
+import deskind.com.rollingwheels.fragments.CurrencyTokenFragment;
 import deskind.com.rollingwheels.fragments.DeleteCarFragment;
 import deskind.com.rollingwheels.fragments.FiltersListFragment;
 import deskind.com.rollingwheels.fragments.FluidsListFragment;
@@ -42,9 +48,13 @@ import deskind.com.rollingwheels.fragments.SpendingsFragment;
 
 
 public class MnActivity extends FragmentActivity {
+    DrawerLayout drawerLayout;
+    NavigationView navigationView;
+
 
     private FloatingActionButton fabPlus, fabFuel, fabRepair, fabFluid, fabFilter;
     private  Animation open, close, clockwise, anticlockwise;
+    private TextView tv_currency;
 
     //fabs open or close flag
     private static boolean isFabOpen = false;
@@ -74,16 +84,17 @@ public class MnActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_const);
 
-        Log.i("Create","Called");
         //init
         AppDatabase database = DBUtility.getAppDatabase(this);
+        fragmentManager = getSupportFragmentManager();
 
         p = findViewById(R.id.pager);
         //init temp
         pager = p;
 
-        fragmentManager = getSupportFragmentManager();
-
+        drawerLayout = findViewById(R.id.main_drawer);
+        navigationView = findViewById(R.id.nav_view);
+        tv_currency = findViewById(R.id.tv_currency1);
         fabPlus = findViewById(R.id.fab_plus);
         fabFuel = findViewById(R.id.fab_fuel);
         fabRepair = findViewById(R.id.fab_repair);
@@ -97,6 +108,7 @@ public class MnActivity extends FragmentActivity {
         anticlockwise = getAnimation(R.anim.rotate_anticlockwise, this);
 
         //listeners
+        navigationView.setNavigationItemSelectedListener(new DrawerEvent());
         fabPlus.setOnClickListener(new FabPlusClicked());
 
         fragmentManager.addOnBackStackChangedListener(new MyBackStackChangedListener());
@@ -121,26 +133,29 @@ public class MnActivity extends FragmentActivity {
         pager.setOnPageChangeListener(new CarsPagerListener());
 
         //hide sp_fragment from main layout
-        if(fragmentManager.getBackStackEntryCount() != 0){
+        if (fragmentManager.getBackStackEntryCount() != 0) {
             findViewById(R.id.sp_fragment).setVisibility(View.INVISIBLE);
+        }
+
+        //trying to get currency token from shared preferences "tokens" file
+        SharedPreferences tokens = getSharedPreferences("tokens", Context.MODE_PRIVATE);
+        currencyToken = tokens.getString("currency_token", "");
+        if (!currencyToken.equals("")) {
+            tv_currency.setText(currencyToken);
         }
 
         //close fabs
         closeFabs();
 
         //calcutate spendings for first element in slider if such exists
-        if(!cars.isEmpty()) {
-            spendingsFragment = (SpendingsFragment)fragmentManager.findFragmentById(R.id.sp_fragment);
+        if (!cars.isEmpty()) {
+            spendingsFragment = (SpendingsFragment) fragmentManager.findFragmentById(R.id.sp_fragment);
             spendingsFragment.setSpendings(0);
-        }else{
+        } else {
             replaceFragment(R.id.central_fragment, new AddNewCarFragment());
             Toast.makeText(this, "Add a car ...", Toast.LENGTH_LONG).show();
         }
-
-
-
     }
-
 
 
     public List<CarFragment> getSliderFragments() {
@@ -182,12 +197,6 @@ public class MnActivity extends FragmentActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.i("Stop", "CALLED");
     }
 
     public void addNewCar(View v){
@@ -314,6 +323,13 @@ public class MnActivity extends FragmentActivity {
         isFabOpen = true;
     }
 
+    public void setCurrencyToken(String s) {
+        tv_currency.setText(s);
+    }
+
+    public String getCurrencyToken() {
+        return currencyToken;
+    }
 
 
     //INNER CLASSES
@@ -388,4 +404,12 @@ public class MnActivity extends FragmentActivity {
     }
 
 
+    private class DrawerEvent implements NavigationView.OnNavigationItemSelectedListener {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            drawerLayout.closeDrawers();
+            replaceFragment(R.id.central_fragment, new CurrencyTokenFragment());
+            return true;
+        }
+    }
 }
