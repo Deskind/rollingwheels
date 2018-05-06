@@ -65,4 +65,18 @@ public class SpendingsCalculator {
         }
         return spendings;
     }
+
+    public int calcRepairSpendingsForPeriod(Context context, int currentItem, String fromString, String toString) {
+        int spendings = 0;
+
+        List<Repair> repairs = DBUtility.getAppDatabase(context).getCarsDao().getAllRapairsForBrandForPeriod(MnActivity.cars.get(currentItem).getCarBrand(), fromString, toString);
+        if(!repairs.isEmpty()){
+            for(Repair r : repairs){
+                spendings+=r.getPartPrice();
+            }
+            return spendings;
+        }
+
+        return spendings;
+    }
 }

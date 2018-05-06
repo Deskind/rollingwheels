@@ -58,6 +58,9 @@ public interface CarsDAO {
     @Query("SELECT * FROM Repair where CarBrand = :carBrand ORDER BY \"Пробег\" DESC")
     public List<Repair> getAllRapairsForBrand(String carBrand);
 
+    @Query("select * from Repair where \"Дата\" between \"2017-12-01\" and \"2018-05-01\"")
+    public List<Repair> getAllRapairsForBrandForPeriod(String carBrand, String fromString, String toString);
+
     @Query("SELECT price FROM FluidService where car_brand = :carBrand")
     public int[] getFluidServicesTotalCost(String carBrand);
 
@@ -75,6 +78,5 @@ public interface CarsDAO {
 
     @Query("DELETE from FilterService where service_id = :serviceId")
     public void deleteFilterService(int serviceId);
-
 
 }

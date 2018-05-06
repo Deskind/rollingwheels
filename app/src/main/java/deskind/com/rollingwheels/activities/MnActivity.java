@@ -45,6 +45,7 @@ import deskind.com.rollingwheels.fragments.FuelsListFragment;
 import deskind.com.rollingwheels.fragments.RepairsListFragment;
 import deskind.com.rollingwheels.fragments.ServiceFragment;
 import deskind.com.rollingwheels.fragments.SpendingsFragment;
+import deskind.com.rollingwheels.fragments.SpendingsPeriodFragment;
 
 
 public class MnActivity extends FragmentActivity {
@@ -407,8 +408,18 @@ public class MnActivity extends FragmentActivity {
     private class DrawerEvent implements NavigationView.OnNavigationItemSelectedListener {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            drawerLayout.closeDrawers();
-            replaceFragment(R.id.central_fragment, new CurrencyTokenFragment());
+            int itemId = item.getItemId();
+            //make decision based on item id
+            switch (itemId){
+                case (R.id.set_currency_token) :
+                    drawerLayout.closeDrawers();
+                    replaceFragment(R.id.central_fragment, new CurrencyTokenFragment());
+                    break;
+                case (R.id.set_period):
+                    drawerLayout.closeDrawers();
+                    replaceFragment(R.id.central_fragment, new SpendingsPeriodFragment());
+                    break;
+            }
             return true;
         }
     }
