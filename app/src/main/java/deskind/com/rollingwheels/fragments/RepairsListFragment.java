@@ -1,5 +1,6 @@
 package deskind.com.rollingwheels.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -23,7 +24,7 @@ import deskind.com.rollingwheels.entities.Repair;
 public class RepairsListFragment extends Fragment {
 
     private ExpandableListView elvRepairsList;
-    private Context context;
+    private MnActivity activity;
     private ExpandableRepairsListAdapter adapter;
     private List<Repair> headers;
     private Map<Integer, List<String>> content;
@@ -46,7 +47,7 @@ public class RepairsListFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         elvRepairsList = view.findViewById(R.id.elv_repairs_list);
-        context = getActivity();
+        activity = (MnActivity)getActivity();
 
         prepareData();
     }
@@ -54,7 +55,13 @@ public class RepairsListFragment extends Fragment {
     public void prepareData(){
         ViewPager pager = ((MnActivity)getActivity()).getPager();
         carName = MnActivity.cars.get(pager.getCurrentItem()).getCarBrand();
-        headers = DBUtility.getAppDatabase(context).getCarsDao().getAllRapairsForBrand(carName);
+
+        if(activity.periodMode == false) {
+            headers = DBUtility.getAppDatabase(activity).getCarsDao().getAllRapairsForBrand(carName);
+        }else{
+            headers = DBUtility.getAppDatabase(activity).getCarsDao().getAllRapairsForBrandForPeriod(activity.fromDate, activity.toDate, carName);
+        }
+
         content = new HashMap<>();
 
         for(Repair r : headers){
@@ -63,7 +70,7 @@ public class RepairsListFragment extends Fragment {
             content.put(r.getRepairId(), list);
         }
 
-        adapter = new ExpandableRepairsListAdapter(context, headers, content, this);
+        adapter = new ExpandableRepairsListAdapter(activity, headers, content, this);
         elvRepairsList.setAdapter(adapter);
     }
 

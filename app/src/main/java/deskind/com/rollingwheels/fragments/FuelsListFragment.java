@@ -1,5 +1,6 @@
 package deskind.com.rollingwheels.fragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import deskind.com.rollingwheels.R;
+import deskind.com.rollingwheels.activities.MnActivity;
 import deskind.com.rollingwheels.adapters.ExpandableFuelsListAdapter;
 import deskind.com.rollingwheels.database.DBUtility;
 import deskind.com.rollingwheels.entities.FuelUp;
@@ -26,7 +28,7 @@ public class FuelsListFragment extends Fragment {
     public static ExpandableFuelsListAdapter adapter;
     public static List<FuelUp> headersList;
     public static HashMap<Integer, List<Integer>> mapContent;
-    public static Context context;
+    public static MnActivity activity;
 
     @Nullable
     @Override
@@ -39,7 +41,7 @@ public class FuelsListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         //init
-        context = getActivity();
+        activity = (MnActivity)getActivity();
         headersList = new ArrayList<>();
         mapContent = new HashMap<>();
 
@@ -50,7 +52,11 @@ public class FuelsListFragment extends Fragment {
         String car = getArguments().getString("name");
 
         //Get fuel ups from database
-        headersList = DBUtility.getAppDatabase(getContext()).getCarsDao().getFuelUpsFor(car);
+        if(activity.periodMode == false) {
+            headersList = DBUtility.getAppDatabase(getContext()).getCarsDao().getFuelUpsFor(car);
+        }else{
+            headersList = DBUtility.getAppDatabase(getContext()).getCarsDao().getAllFuelUpsForBrandForPeriod(activity.fromDate, activity.toDate, car);
+        }
 
         //Fill data
         for(FuelUp fuelUp : headersList){
@@ -78,7 +84,7 @@ public class FuelsListFragment extends Fragment {
         mapContent = new HashMap<>();
 
         //get data from db
-        headersList = DBUtility.getAppDatabase(context).getCarsDao().getFuelUpsFor(carName);
+        headersList = DBUtility.getAppDatabase(activity).getCarsDao().getFuelUpsFor(carName);
 
         //fill with data
         for(FuelUp fuelUp : headersList){
@@ -92,7 +98,7 @@ public class FuelsListFragment extends Fragment {
         }
 
         //create adapter and set to extendable list view
-        adapter = new ExpandableFuelsListAdapter(context, headersList, mapContent);
+        adapter = new ExpandableFuelsListAdapter(activity, headersList, mapContent);
         elv.setAdapter(adapter);
     }
 }

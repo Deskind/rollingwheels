@@ -25,7 +25,7 @@ import deskind.com.rollingwheels.entities.Repair;
 
 public class FluidsListFragment extends Fragment{
     private ExpandableListView elvRepairsList;
-    private Context context;
+    private MnActivity activity;
     private ExpandableFluidsListAdapter adapter;
     private List<FluidService> headers;
     private Map<Integer, List<String>> content;
@@ -46,14 +46,20 @@ public class FluidsListFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         elvRepairsList = view.findViewById(R.id.elv_fluids_list);
-        context = getActivity();
+        activity = (MnActivity)getActivity();
         prepareData();
     }
 
     public void prepareData(){
         ViewPager pager = ((MnActivity)getActivity()).getPager();
         carName = MnActivity.cars.get(pager.getCurrentItem()).getCarBrand();
-        headers = DBUtility.getAppDatabase(context).getCarsDao().getAllFluidServices(carName);
+
+        if(activity.periodMode == false) {
+            headers = DBUtility.getAppDatabase(activity).getCarsDao().getAllFluidServices(carName);
+        }else{
+            headers = DBUtility.getAppDatabase(activity).getCarsDao().getAllFluidServicesForBrandForPeriod(activity.fromDate, activity.toDate, carName);
+        }
+
         content = new HashMap<>();
 
         for(FluidService s : headers){
@@ -62,7 +68,7 @@ public class FluidsListFragment extends Fragment{
             content.put(s.getServiceId(), list);
         }
 
-        adapter = new ExpandableFluidsListAdapter(context, headers, content, this);
+        adapter = new ExpandableFluidsListAdapter(activity, headers, content, this);
         elvRepairsList.setAdapter(adapter);
     }
 

@@ -89,6 +89,8 @@ public class SpendingsPeriodFragment extends Fragment {
                     activity.tv_period.setText("from " + from + "  to " + to);
                     //turn app into period mode
                     activity.setPeriodMode(true);
+                    activity.fromDate = from;
+                    activity.toDate = to;
                 }
 
             }

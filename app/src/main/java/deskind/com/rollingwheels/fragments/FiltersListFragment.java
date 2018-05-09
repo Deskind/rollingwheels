@@ -23,7 +23,7 @@ import deskind.com.rollingwheels.entities.FilterService;
 
 public class FiltersListFragment extends Fragment{
     private ExpandableListView elvFiltersList;
-    private Context context;
+    private MnActivity activity;
     private ExpandableFiltersListAdapter adapter;
     private List<FilterService> headers;
     private Map<Integer, List<String>> content;
@@ -44,14 +44,19 @@ public class FiltersListFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         elvFiltersList = view.findViewById(R.id.elv_filters_list);
-        context = getActivity();
+        activity = (MnActivity)getActivity();
         prepareData();
     }
 
     public void prepareData(){
         ViewPager pager = ((MnActivity)getActivity()).getPager();
         carName = MnActivity.cars.get(pager.getCurrentItem()).getCarBrand();
-        headers = DBUtility.getAppDatabase(context).getCarsDao().getAllFilterServices(carName);
+
+        if(activity.periodMode == false) {
+            headers = DBUtility.getAppDatabase(activity).getCarsDao().getAllFilterServices(carName);
+        }else{
+            headers = DBUtility.getAppDatabase(activity).getCarsDao().getAllFilterServicesForBrandForPeriod(activity.fromDate, activity.toDate, carName);
+        }
         content = new HashMap<>();
 
         for(FilterService s : headers){
@@ -60,7 +65,7 @@ public class FiltersListFragment extends Fragment{
             content.put(s.getServiceId(), list);
         }
 
-        adapter = new ExpandableFiltersListAdapter(context, headers, content, this);
+        adapter = new ExpandableFiltersListAdapter(activity, headers, content, this);
         elvFiltersList.setAdapter(adapter);
     }
 

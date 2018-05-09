@@ -53,7 +53,10 @@ public class MnActivity extends FragmentActivity {
     private NavigationView navigationView;
 
     //indicates whether app shows spendings for all time or just for some period
-    private boolean periodMode = false;
+    public boolean periodMode = false;
+    //this variables will be changed by period fragment
+    public String fromDate = "";
+    public String toDate = "";
 
     private FloatingActionButton fabPlus, fabFuel, fabRepair, fabFluid, fabFilter;
     private  Animation open, close, clockwise, anticlockwise;
@@ -369,9 +372,17 @@ public class MnActivity extends FragmentActivity {
             if(!cars.isEmpty()) {
                 if(spendingsFragment == null){
                     spendingsFragment = new SpendingsFragment();
-                    spendingsFragment.setSpendings(pager.getCurrentItem());
+                    if(periodMode == false) {
+                        spendingsFragment.setSpendings(pager.getCurrentItem());
+                    }else{
+                        spendingsFragment.setSpendingsForPeriod(pager.getCurrentItem(), fromDate, toDate);
+                    }
                 }else{
-                    spendingsFragment.setSpendings(pager.getCurrentItem());
+                    if(periodMode == false) {
+                        spendingsFragment.setSpendings(pager.getCurrentItem());
+                    }else{
+                        spendingsFragment.setSpendingsForPeriod(pager.getCurrentItem(), fromDate, toDate);
+                    }
                 }
             }
         }
@@ -405,8 +416,12 @@ public class MnActivity extends FragmentActivity {
 
         @Override
         public void onPageSelected(int position) {
-            //calculate fuel spendings for car
-            spendingsFragment.setSpendings(pager.getCurrentItem());
+            //check period mode and calculate spendings for car
+            if(periodMode == false) {
+                spendingsFragment.setSpendings(pager.getCurrentItem());
+            }else{
+                spendingsFragment.setSpendingsForPeriod(pager.getCurrentItem(), fromDate, toDate);
+            }
             Log.i("SELECTED", "CALLED");
         }
 
