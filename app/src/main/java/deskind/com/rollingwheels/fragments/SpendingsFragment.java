@@ -51,6 +51,11 @@ public class SpendingsFragment extends Fragment {
 
 
     public void setSpendingsForPeriod(int currentItem, String fromString, String toString) {
-        repairsSpendings.setText(calculator.calcRepairSpendingsForPeriod(context, currentItem, fromString, toString));
+        fuelSpendings.setText(String.valueOf(calculator.calcFuelSpendingsForPeriod(context,currentItem,fromString,toString)));
+        repairsSpendings.setText(String.valueOf(calculator.calcRepairSpendingsForPeriod(context, currentItem, fromString, toString)));
+        fluidsSpendings.setText(String.valueOf(calculator.calcFluidsSpendingsForPeriod(context, currentItem, fromString, toString)));
+        filtersSpendings.setText(String.valueOf(calculator.calcFiltersSpendingsForPeriod(context, currentItem, fromString, toString)));
+
+
     }
 }

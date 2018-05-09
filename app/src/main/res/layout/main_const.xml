@@ -2,6 +2,7 @@
 <android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -175,7 +176,7 @@
                 android:layout_marginStart="16dp"
                 android:text="Your currency is: "
                 android:textColor="@color/indigo_dark"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tv_currency1"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -187,9 +188,31 @@
                 android:layout_marginStart="16dp"
                 android:text="------"
                 android:textColor="@color/indigo_dark"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_currency" />
+
+            <TextView
+                android:id="@+id/tv_period"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Period: "
+                android:textColor="@color/indigo_dark"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_currency"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_period1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="All time"
+                android:textColor="@color/indigo_dark"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@+id/tv_currency"
+                app:layout_constraintStart_toEndOf="@+id/tv_period" />
 
         </android.support.constraint.ConstraintLayout>
 

@@ -113,10 +113,10 @@ public class ExpandableFiltersListAdapter extends BaseExpandableListAdapter{
         delBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Repair r = (Repair)delBtn.getTag();
-                DBUtility.getAppDatabase(context).getCarsDao().deleteRepair(r.getRepairId());
-                content.remove(r.getRepairId());
-                headers.remove(r);
+                FilterService service = (FilterService)delBtn.getTag();
+                DBUtility.getAppDatabase(context).getCarsDao().deleteFilterService(service.getServiceId());
+                content.remove(service.getServiceId());
+                headers.remove(service);
                 filtersListFragment.getAdapter().notifyDataSetChanged();
                 Toast.makeText(context, "Deleted ... ", Toast.LENGTH_SHORT).show();
             }

@@ -28,6 +28,7 @@ import deskind.com.rollingwheels.database.AppDatabase;
 import deskind.com.rollingwheels.database.DBUtility;
 import deskind.com.rollingwheels.entities.Car;
 import deskind.com.rollingwheels.entities.FuelUp;
+import deskind.com.rollingwheels.utils.MyDateFormatter;
 
 public class FuelUpFragment extends Fragment {
     private final String FUEL_PRICE = "FUEL_PRICE";
@@ -121,7 +122,7 @@ public class FuelUpFragment extends Fragment {
             float fuelUpPrice = Float.valueOf(this.fuelPrice.getText().toString());
             int fuelUpValue = Integer.valueOf(this.fuelUpValue.getText().toString());
 
-            FuelUp fuelUp = new FuelUp(carName, fuelUpDate, fuelUpValue, fuelUpPrice);
+            FuelUp fuelUp = new FuelUp(carName, MyDateFormatter.makeTwoNumbersDate(fuelUpDate), fuelUpValue, fuelUpPrice);
             appDatabase.getCarsDao().insertFuelUp(fuelUp);
 
             Toast.makeText(getActivity(), "Done", Toast.LENGTH_SHORT).show();

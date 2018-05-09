@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import deskind.com.rollingwheels.R;
@@ -27,9 +28,11 @@ import deskind.com.rollingwheels.database.DBUtility;
 import deskind.com.rollingwheels.entities.FilterService;
 import deskind.com.rollingwheels.entities.FluidService;
 import deskind.com.rollingwheels.entities.Repair;
+import deskind.com.rollingwheels.utils.MyDateFormatter;
+
+import static deskind.com.rollingwheels.utils.MyDateFormatter.makeTwoNumbersDate;
 
 public class ServiceFragment extends Fragment {
-
     public static TextView serviceDate;
     public EditText mileage, partManufacturer, description, price;
     public Button serviceDone;
@@ -39,13 +42,13 @@ public class ServiceFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
          return inflater.inflate(R.layout.service_fragment, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         //init
         context = getActivity();
 
@@ -86,22 +89,23 @@ public class ServiceFragment extends Fragment {
                     Toast.makeText(context, "Fill empty fields ...", Toast.LENGTH_SHORT).show();
                 }else{
                     if(serviceType.equals("repair")){
+
                         carsDao.insertRepair(new Repair(carName,
-                                sDate,
+                                makeTwoNumbersDate(sDate),
                                 Long.valueOf(sMileage),
                                 sManufacturer,
                                 sDescription,
                                 Integer.valueOf(sPrice)));
                     }else if(serviceType.equals("fluid")){
                         carsDao.insertFluidService(new FluidService(carName,
-                                sDate,
+                                makeTwoNumbersDate(sDate),
                                 Long.valueOf(sMileage),
                                 sManufacturer,
                                 Integer.valueOf(sPrice),
                                 sDescription));
                     }else if(serviceType.equals("filter")){
                         carsDao.insertFilterService(new FilterService(carName,
-                                sDate,
+                                makeTwoNumbersDate(sDate),
                                 Long.valueOf(sMileage),
                                 sManufacturer,
                                 Integer.valueOf(sPrice),
@@ -137,6 +141,8 @@ public class ServiceFragment extends Fragment {
 
     public static class SelectDateFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener{
 
+        DecimalFormat decimalFormat = new DecimalFormat("00");
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Use the current date as the default date in the picker
@@ -147,7 +153,10 @@ public class ServiceFragment extends Fragment {
 
             // Create a new instance of DatePickerDialog and return it
             return new DatePickerDialog(getActivity(), this, year, month, day);
+
         }
+
+
 
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int day) {

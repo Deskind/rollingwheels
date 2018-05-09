@@ -58,8 +58,17 @@ public interface CarsDAO {
     @Query("SELECT * FROM Repair where CarBrand = :carBrand ORDER BY \"Пробег\" DESC")
     public List<Repair> getAllRapairsForBrand(String carBrand);
 
-    @Query("select * from Repair where \"Дата\" between \"2017-12-01\" and \"2018-05-01\"")
-    public List<Repair> getAllRapairsForBrandForPeriod(String carBrand, String fromString, String toString);
+    @Query("select * from Repair where \"Дата\" between :fromString and :toString and \"CarBrand\"= :carName")
+    public List<Repair> getAllRapairsForBrandForPeriod(String fromString, String toString, String carName);
+
+    @Query("select * from FuelUp where \"date\" between :fromString and :toString and \"car_brand\"= :carName")
+    List<FuelUp> getAllFuelUpsForBrandForPeriod(String fromString, String toString, String carName);
+
+    @Query("select * from FluidService where \"Date\" between :fromString and :toString and \"car_brand\"= :carName")
+    List<FluidService> getAllFluidServicesForBrandForPeriod(String fromString, String toString, String carName);
+
+    @Query("select * from FilterService where \"Date\" between :fromString and :toString and \"car_brand\"= :carName")
+    List<FilterService> getAllFilterServicesForBrandForPeriod(String fromString, String toString, String carName);
 
     @Query("SELECT price FROM FluidService where car_brand = :carBrand")
     public int[] getFluidServicesTotalCost(String carBrand);
@@ -78,5 +87,4 @@ public interface CarsDAO {
 
     @Query("DELETE from FilterService where service_id = :serviceId")
     public void deleteFilterService(int serviceId);
-
 }

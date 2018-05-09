@@ -49,13 +49,15 @@ import deskind.com.rollingwheels.fragments.SpendingsPeriodFragment;
 
 
 public class MnActivity extends FragmentActivity {
-    DrawerLayout drawerLayout;
-    NavigationView navigationView;
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
 
+    //indicates whether app shows spendings for all time or just for some period
+    private boolean periodMode = false;
 
     private FloatingActionButton fabPlus, fabFuel, fabRepair, fabFluid, fabFilter;
     private  Animation open, close, clockwise, anticlockwise;
-    private TextView tv_currency;
+    public TextView tv_currency, tv_period;
 
     //fabs open or close flag
     private static boolean isFabOpen = false;
@@ -96,6 +98,7 @@ public class MnActivity extends FragmentActivity {
         drawerLayout = findViewById(R.id.main_drawer);
         navigationView = findViewById(R.id.nav_view);
         tv_currency = findViewById(R.id.tv_currency1);
+        tv_period = findViewById(R.id.tv_period1);
         fabPlus = findViewById(R.id.fab_plus);
         fabFuel = findViewById(R.id.fab_fuel);
         fabRepair = findViewById(R.id.fab_repair);
@@ -114,7 +117,6 @@ public class MnActivity extends FragmentActivity {
 
         fragmentManager.addOnBackStackChangedListener(new MyBackStackChangedListener());
         fabFuel.setOnClickListener(new FabFuelClicked());
-        fabRepair.setOnClickListener(new FabRepairClicked());
 
         //get all cars from db
         cars = database.getCarsDao().getAllCars();
@@ -175,6 +177,14 @@ public class MnActivity extends FragmentActivity {
         return spendingsFragment;
     }
 
+    public boolean isPeriodMode() {
+        return periodMode;
+    }
+
+    public void setPeriodMode(boolean mode){
+        periodMode = mode;
+    }
+
     //methods fills list of fragments based on cars list
     private void createCarsFragments(List<Car> cars, List<CarFragment> carFragments) {
         CarFragment f;
@@ -205,6 +215,7 @@ public class MnActivity extends FragmentActivity {
     }
 
     public void addNewService(View v){
+
         String serviceType = "";
         int viewId = v.getId();
 
@@ -396,6 +407,7 @@ public class MnActivity extends FragmentActivity {
         public void onPageSelected(int position) {
             //calculate fuel spendings for car
             spendingsFragment.setSpendings(pager.getCurrentItem());
+            Log.i("SELECTED", "CALLED");
         }
 
         @Override

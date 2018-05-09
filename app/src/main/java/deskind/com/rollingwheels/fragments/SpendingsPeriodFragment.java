@@ -7,13 +7,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 import deskind.com.rollingwheels.R;
@@ -63,13 +66,31 @@ public class SpendingsPeriodFragment extends Fragment {
         doneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MnActivity activity = (MnActivity)getActivity();
-                int currentItem = activity.getPager().getCurrentItem();
-                SpendingsFragment spendingsFragment = activity.getSpendingsFragment();
+                //getting text values from views
+                String from = dateFrom.getText().toString();
+                String to = dateTo.getText().toString();
 
-                spendingsFragment.setSpendingsForPeriod(currentItem,dateFrom.getText().toString(), dateTo.getText().toString());
+                //check on empty user input
+                if(from.equals("") | to.equals("")){
+                    Toast.makeText(getActivity(), "Fill all fields ...", Toast.LENGTH_SHORT).show();
+                    return;
+                //if user's text is not empty
+                }else{
+                    MnActivity activity = (MnActivity)getActivity();
+                    int currentItem = activity.getPager().getCurrentItem();
+                    SpendingsFragment spendingsFragment = activity.getSpendingsFragment();
 
-                getFragmentManager().popBackStackImmediate();
+                    //close fragment
+                    getFragmentManager().popBackStackImmediate();
+
+                    //setting spendings for period
+                    spendingsFragment.setSpendingsForPeriod(currentItem,dateFrom.getText().toString(), dateTo.getText().toString());
+                    //set value of text view on main screen
+                    activity.tv_period.setText("from " + from + "  to " + to);
+                    //turn app into period mode
+                    activity.setPeriodMode(true);
+                }
+
             }
         });
     }
@@ -90,7 +111,15 @@ public class SpendingsPeriodFragment extends Fragment {
 
         @Override
         public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-            String date = year +"-"+(month+1)+"-"+day;
+            month++;
+
+            DecimalFormat formatter = new DecimalFormat("00");
+
+            String m = formatter.format(Double.valueOf(month));
+            String d = formatter.format(Double.valueOf(day));
+
+            String date = year +"-"+m+"-"+d;
+
             String fromto = getArguments().getString("fromto");
             switch (fromto){
                 case "from" :

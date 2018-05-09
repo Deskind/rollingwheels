@@ -1,6 +1,7 @@
 package deskind.com.rollingwheels;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.List;
 
@@ -68,8 +69,9 @@ public class SpendingsCalculator {
 
     public int calcRepairSpendingsForPeriod(Context context, int currentItem, String fromString, String toString) {
         int spendings = 0;
+        String carName = MnActivity.cars.get(currentItem).getCarBrand();
 
-        List<Repair> repairs = DBUtility.getAppDatabase(context).getCarsDao().getAllRapairsForBrandForPeriod(MnActivity.cars.get(currentItem).getCarBrand(), fromString, toString);
+        List<Repair> repairs = DBUtility.getAppDatabase(context).getCarsDao().getAllRapairsForBrandForPeriod(fromString, toString, carName);
         if(!repairs.isEmpty()){
             for(Repair r : repairs){
                 spendings+=r.getPartPrice();
@@ -77,6 +79,59 @@ public class SpendingsCalculator {
             return spendings;
         }
 
+
+
         return spendings;
+    }
+
+    public float calcFuelSpendingsForPeriod(Context context, int currentItem, String fromString, String toString) {
+        float spendings = 0;
+
+        String carName = MnActivity.cars.get(currentItem).getCarBrand();
+        List<FuelUp> fuelUps = DBUtility.getAppDatabase(context).getCarsDao().getAllFuelUpsForBrandForPeriod(fromString, toString, carName);
+
+
+
+        if(!fuelUps.isEmpty()){
+            for(FuelUp fuelUp : fuelUps){
+                spendings+=fuelUp.getLiters()*fuelUp.getCost();
+            }
+            return spendings;
+        }
+
+        return spendings;
+    }
+
+    public int calcFluidsSpendingsForPeriod(Context context, int currentItem, String fromString, String toString) {
+        int spendings = 0;
+
+        String carName = MnActivity.cars.get(currentItem).getCarBrand();
+        List<FluidService> services = DBUtility.getAppDatabase(context).getCarsDao().getAllFluidServicesForBrandForPeriod(fromString, toString, carName);
+
+        if(!services.isEmpty()){
+            for(FluidService service : services){
+                spendings+=service.getPrice();
+            }
+            return spendings;
+        }
+
+        return spendings;
+    }
+
+    public int calcFiltersSpendingsForPeriod(Context context, int currentItem, String fromString, String toString) {
+        int spendings = 0;
+
+        String carName = MnActivity.cars.get(currentItem).getCarBrand();
+
+        List<FilterService> services = DBUtility.getAppDatabase(context).getCarsDao().getAllFilterServicesForBrandForPeriod(fromString, toString, carName);
+
+        if(!services.isEmpty()){
+            for(FilterService service : services){
+                spendings+=service.getPrice();
+            }
+            return spendings;
+        }
+
+        return  spendings;
     }
 }
