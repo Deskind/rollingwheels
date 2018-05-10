@@ -11,6 +11,7 @@ import deskind.com.rollingwheels.entities.Car;
 import deskind.com.rollingwheels.entities.FilterService;
 import deskind.com.rollingwheels.entities.FluidService;
 import deskind.com.rollingwheels.entities.FuelUp;
+import deskind.com.rollingwheels.entities.OtherService;
 import deskind.com.rollingwheels.entities.Repair;
 
 public class SpendingsCalculator {
@@ -64,6 +65,21 @@ public class SpendingsCalculator {
                 spendings+=service.getPrice();
             }
         }
+        return spendings;
+    }
+
+    public int calcOtherSpendings(Context context, int currentItem) {
+        int spendings = 0;
+
+        String carName = MnActivity.cars.get(currentItem).getCarBrand();
+        List<OtherService> services = DBUtility.getAppDatabase(context).getCarsDao().getAllOtherServices(carName);
+        if(!services.isEmpty()){
+            for(OtherService service : services){
+                spendings+=service.getPrice();
+            }
+            return  spendings;
+        }
+
         return spendings;
     }
 
@@ -133,5 +149,16 @@ public class SpendingsCalculator {
         }
 
         return  spendings;
+    }
+
+
+    public int calcOtherSpendingsForBrandForPeriod(Context context, int currentItem, String fromString, String toString) {
+        int spendings = 0;
+
+        String carName = MnActivity.cars.get(currentItem).getCarBrand();
+
+        List<OtherService> services = DBUtility.getAppDatabase(context).getCarsDao().getAllOtherServicesForBrandForPeriod(fromString, toString, carName);
+
+        return spendings;
     }
 }

@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +26,8 @@ import deskind.com.rollingwheels.dao.CarsDAO;
 import deskind.com.rollingwheels.database.DBUtility;
 import deskind.com.rollingwheels.entities.FilterService;
 import deskind.com.rollingwheels.entities.FluidService;
+import deskind.com.rollingwheels.entities.OtherService;
 import deskind.com.rollingwheels.entities.Repair;
-import deskind.com.rollingwheels.utils.MyDateFormatter;
 
 import static deskind.com.rollingwheels.utils.MyDateFormatter.makeTwoNumbersDate;
 
@@ -53,11 +52,11 @@ public class ServiceFragment extends Fragment {
         context = getActivity();
 
         //find views
-        serviceDate = getView().findViewById(R.id.service_date);
-        mileage = getView().findViewById(R.id.service_mileage);
+        serviceDate = getView().findViewById(R.id.other_date);
+        mileage = getView().findViewById(R.id.other_mileage);
         partManufacturer = getView().findViewById(R.id.part_manufacturer);
-        description = getView().findViewById(R.id.service_description);
-        price = getView().findViewById(R.id.service_price);
+        description = getView().findViewById(R.id.other_description);
+        price = getView().findViewById(R.id.other_price);
         serviceDone = getView().findViewById(R.id.service_done);
 
         //listeners
@@ -105,6 +104,13 @@ public class ServiceFragment extends Fragment {
                                 sDescription));
                     }else if(serviceType.equals("filter")){
                         carsDao.insertFilterService(new FilterService(carName,
+                                makeTwoNumbersDate(sDate),
+                                Long.valueOf(sMileage),
+                                sManufacturer,
+                                Integer.valueOf(sPrice),
+                                sDescription));
+                    }else if(serviceType.equals("other")){
+                        carsDao.insertOtherService(new OtherService(carName,
                                 makeTwoNumbersDate(sDate),
                                 Long.valueOf(sMileage),
                                 sManufacturer,

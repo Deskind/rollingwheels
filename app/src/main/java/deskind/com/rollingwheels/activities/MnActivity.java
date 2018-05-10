@@ -15,7 +15,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
@@ -27,13 +26,9 @@ import java.util.List;
 import deskind.com.rollingwheels.Fragmentator;
 import deskind.com.rollingwheels.R;
 import deskind.com.rollingwheels.adapters.CarsPagerAdapter;
-import deskind.com.rollingwheels.dao.CarsDAO;
 import deskind.com.rollingwheels.database.AppDatabase;
 import deskind.com.rollingwheels.database.DBUtility;
 import deskind.com.rollingwheels.entities.Car;
-import deskind.com.rollingwheels.entities.FilterService;
-import deskind.com.rollingwheels.entities.FluidService;
-import deskind.com.rollingwheels.entities.Repair;
 import deskind.com.rollingwheels.fragments.AddNewCarFragment;
 import deskind.com.rollingwheels.fragments.CarFragment;
 import deskind.com.rollingwheels.fragments.CurrencyTokenFragment;
@@ -58,7 +53,7 @@ public class MnActivity extends FragmentActivity {
     public String fromDate = "";
     public String toDate = "";
 
-    private FloatingActionButton fabPlus, fabFuel, fabRepair, fabFluid, fabFilter;
+    private FloatingActionButton fabPlus, fabFuel, fabRepair, fabFluid, fabFilter, fabOther;
     private  Animation open, close, clockwise, anticlockwise;
     public TextView tv_currency, tv_period;
 
@@ -107,6 +102,7 @@ public class MnActivity extends FragmentActivity {
         fabRepair = findViewById(R.id.fab_repair);
         fabFluid = findViewById(R.id.fab_fluid);
         fabFilter = findViewById(R.id.fab_filter);
+        fabOther = findViewById(R.id.fab_other);
 
         //load animations
         open = getAnimation(R.anim.fab_open, this);
@@ -232,6 +228,9 @@ public class MnActivity extends FragmentActivity {
             case R.id.fab_filter:
                 serviceType = "filter";
                 break;
+            case R.id.fab_other:
+                serviceType = "other";
+                break;
         }
 
         ServiceFragment f = new ServiceFragment();
@@ -320,6 +319,8 @@ public class MnActivity extends FragmentActivity {
         fabFluid.setClickable(false);
         fabFilter.startAnimation(close);
         fabFilter.setClickable(false);
+        fabOther.startAnimation(close);
+        fabOther.setClickable(false);
 
         isFabOpen = false;
     }
@@ -334,6 +335,8 @@ public class MnActivity extends FragmentActivity {
         fabFluid.setClickable(true);
         fabFilter.startAnimation(open);
         fabFilter.setClickable(true);
+        fabOther.startAnimation(open);
+        fabOther.setClickable(true);
 
         isFabOpen = true;
     }
@@ -345,6 +348,8 @@ public class MnActivity extends FragmentActivity {
     public String getCurrencyToken() {
         return currencyToken;
     }
+
+
 
 
     //INNER CLASSES
@@ -459,6 +464,12 @@ public class MnActivity extends FragmentActivity {
                 case (R.id.set_period):
                     drawerLayout.closeDrawers();
                     replaceFragment(R.id.central_fragment, new SpendingsPeriodFragment());
+                    break;
+                case (R.id.reset_period):
+                    drawerLayout.closeDrawers();
+                    periodMode = false;
+                    spendingsFragment.setSpendings(pager.getCurrentItem());
+                    tv_period.setText("All time");
                     break;
             }
             return true;

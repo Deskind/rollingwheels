@@ -7,7 +7,7 @@
     android:background="@android:color/transparent">
 
     <EditText
-        android:id="@+id/service_mileage"
+        android:id="@+id/other_mileage"
         android:layout_width="125dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -18,7 +18,7 @@
         android:textColorHint="@color/hint_grey_light"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/service_date" />
+        app:layout_constraintTop_toBottomOf="@+id/other_date" />
 
     <EditText
         android:id="@+id/part_manufacturer"
@@ -31,10 +31,10 @@
         android:textColorHint="@color/hint_grey_light"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/service_mileage" />
+        app:layout_constraintTop_toBottomOf="@+id/other_mileage" />
 
     <TextView
-        android:id="@+id/service_date"
+        android:id="@+id/other_date"
         android:layout_width="125dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -50,7 +50,7 @@
         android:padding="4dp"/>
 
     <EditText
-        android:id="@+id/service_description"
+        android:id="@+id/other_description"
         android:layout_width="262dp"
         android:layout_height="59dp"
         android:layout_marginStart="8dp"
@@ -61,10 +61,10 @@
         android:textColorHint="@color/hint_grey_light"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/service_price" />
+        app:layout_constraintTop_toBottomOf="@+id/other_price" />
 
     <EditText
-        android:id="@+id/service_price"
+        android:id="@+id/other_price"
         android:layout_width="125dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -85,7 +85,7 @@
         android:background="@drawable/transparent_green"
         android:text="Done"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/service_description" />
+        app:layout_constraintTop_toBottomOf="@+id/other_description" />
 
     <TextView
         android:id="@+id/textView2"
@@ -95,8 +95,8 @@
         android:layout_marginStart="8dp"
         android:text="Mileage"
         android:textColor="@color/hint_grey_light"
-        app:layout_constraintBottom_toBottomOf="@+id/service_mileage"
-        app:layout_constraintStart_toEndOf="@+id/service_mileage" />
+        app:layout_constraintBottom_toBottomOf="@+id/other_mileage"
+        app:layout_constraintStart_toEndOf="@+id/other_mileage" />
 
     <TextView
         android:id="@+id/textView3"
@@ -104,7 +104,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:text="Part manufacturer"
+        android:text="Manufacturer"
         android:textColor="@color/hint_grey_light"
         app:layout_constraintBottom_toBottomOf="@+id/part_manufacturer"
         app:layout_constraintStart_toEndOf="@+id/part_manufacturer" />
@@ -117,6 +117,6 @@
         android:layout_marginStart="8dp"
         android:text="Price"
         android:textColor="@color/hint_grey_light"
-        app:layout_constraintBottom_toBottomOf="@+id/service_price"
-        app:layout_constraintStart_toEndOf="@+id/service_price" />
+        app:layout_constraintBottom_toBottomOf="@+id/other_price"
+        app:layout_constraintStart_toEndOf="@+id/other_price" />
 </android.support.constraint.ConstraintLayout>

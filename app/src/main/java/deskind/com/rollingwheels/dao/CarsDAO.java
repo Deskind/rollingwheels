@@ -12,6 +12,7 @@ import deskind.com.rollingwheels.entities.Car;
 import deskind.com.rollingwheels.entities.FilterService;
 import deskind.com.rollingwheels.entities.FluidService;
 import deskind.com.rollingwheels.entities.FuelUp;
+import deskind.com.rollingwheels.entities.OtherService;
 import deskind.com.rollingwheels.entities.Repair;
 
 @Dao
@@ -30,6 +31,9 @@ public interface CarsDAO {
 
     @Insert
     public void insertFilterService(FilterService fluidService);
+
+    @Insert
+    public void insertOtherService(OtherService otherService);
 
     @Query("SELECT * FROM 'Car' where car_brand = :car_brand")
     public Car getCar(String car_brand);
@@ -55,6 +59,9 @@ public interface CarsDAO {
     @Query("SELECT * FROM FilterService where car_brand = :carBrand ORDER BY \"mileage\" DESC ")
     public List<FilterService> getAllFilterServices(String carBrand);
 
+    @Query("SELECT * FROM OtherService where car_brand = :carBrand ORDER BY \"mileage\" DESC ")
+    List<OtherService> getAllOtherServices(String carBrand);
+
     @Query("SELECT * FROM Repair where CarBrand = :carBrand ORDER BY \"Пробег\" DESC")
     public List<Repair> getAllRapairsForBrand(String carBrand);
 
@@ -69,6 +76,9 @@ public interface CarsDAO {
 
     @Query("select * from FilterService where \"Date\" between :fromString and :toString and \"car_brand\"= :carName")
     List<FilterService> getAllFilterServicesForBrandForPeriod(String fromString, String toString, String carName);
+
+    @Query("select * from OtherService where \"Date\" between :fromString and :toString and \"car_brand\"= :carName")
+    List<OtherService> getAllOtherServicesForBrandForPeriod(String fromString, String toString, String carName);
 
     @Query("SELECT price FROM FluidService where car_brand = :carBrand")
     public int[] getFluidServicesTotalCost(String carBrand);
@@ -87,4 +97,7 @@ public interface CarsDAO {
 
     @Query("DELETE from FilterService where service_id = :serviceId")
     public void deleteFilterService(int serviceId);
+
+    @Query("DELETE from OtherService where service_id = :serviceId")
+    void deleteOtherService(int serviceId);
 }

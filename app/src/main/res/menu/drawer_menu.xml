@@ -9,5 +9,8 @@
         <item
             android:id="@+id/set_period"
             android:title="Spendings for the period"/>
+        <item
+            android:id="@+id/reset_period"
+            android:title="Reset period"/>
     </group>
 </menu>

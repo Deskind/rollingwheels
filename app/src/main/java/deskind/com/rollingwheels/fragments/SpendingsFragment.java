@@ -19,8 +19,7 @@ import deskind.com.rollingwheels.activities.MnActivity;
 
 public class SpendingsFragment extends Fragment {
     public SpendingsCalculator calculator = new SpendingsCalculator();
-    public TextView fuelSpendings, repairsSpendings, fluidsSpendings, filtersSpendings;
-    public ImageView ivFuelList, ivRepairsList, ivFluidsList, ivFiltersList;
+    public TextView fuelSpendings, repairsSpendings, fluidsSpendings, filtersSpendings, otherSpendings;
 
     private static Context context;
 
@@ -39,6 +38,7 @@ public class SpendingsFragment extends Fragment {
         repairsSpendings = getView().findViewById(R.id.repairs_spendings);
         fluidsSpendings = getView().findViewById(R.id.fluids_spendings);
         filtersSpendings = getView().findViewById(R.id.filters_spendings);
+        otherSpendings = getView().findViewById(R.id.other_spendings);
 
     }
 
@@ -48,6 +48,8 @@ public class SpendingsFragment extends Fragment {
         repairsSpendings.setText(String.valueOf(calculator.calcRepairSpendings(context, currentItem)));
         fluidsSpendings.setText(String.valueOf(calculator.calcFluidsSpendings(context, currentItem)));
         filtersSpendings.setText(String.valueOf(calculator.calcFiltersSpendings(context, currentItem)));
+        otherSpendings.setText(String.valueOf(calculator.calcOtherSpendings(context, currentItem)));
+
     }
 
 
@@ -57,6 +59,7 @@ public class SpendingsFragment extends Fragment {
         repairsSpendings.setText(String.valueOf(calculator.calcRepairSpendingsForPeriod(context, currentItem, fromString, toString)));
         fluidsSpendings.setText(String.valueOf(calculator.calcFluidsSpendingsForPeriod(context, currentItem, fromString, toString)));
         filtersSpendings.setText(String.valueOf(calculator.calcFiltersSpendingsForPeriod(context, currentItem, fromString, toString)));
+        otherSpendings.setText(String.valueOf(calculator.calcOtherSpendingsForBrandForPeriod(context, currentItem, fromString, toString)));
 
 
     }
