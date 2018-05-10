@@ -91,7 +91,7 @@ public class SpendingsPeriodFragment extends Fragment {
                     activity.setPeriodMode(true);
                     activity.fromDate = from;
                     activity.toDate = to;
-                }
+                    }
 
             }
         });

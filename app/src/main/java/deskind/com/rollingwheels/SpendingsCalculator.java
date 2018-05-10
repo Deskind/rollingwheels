@@ -158,6 +158,12 @@ public class SpendingsCalculator {
         String carName = MnActivity.cars.get(currentItem).getCarBrand();
 
         List<OtherService> services = DBUtility.getAppDatabase(context).getCarsDao().getAllOtherServicesForBrandForPeriod(fromString, toString, carName);
+        if(!services.isEmpty()){
+            for(OtherService service : services){
+                spendings+=service.getPrice();
+            }
+            return spendings;
+        }
 
         return spendings;
     }

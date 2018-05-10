@@ -26,9 +26,13 @@ import java.util.List;
 import deskind.com.rollingwheels.Fragmentator;
 import deskind.com.rollingwheels.R;
 import deskind.com.rollingwheels.adapters.CarsPagerAdapter;
+import deskind.com.rollingwheels.dao.CarsDAO;
 import deskind.com.rollingwheels.database.AppDatabase;
 import deskind.com.rollingwheels.database.DBUtility;
 import deskind.com.rollingwheels.entities.Car;
+import deskind.com.rollingwheels.entities.FilterService;
+import deskind.com.rollingwheels.entities.FluidService;
+import deskind.com.rollingwheels.entities.Repair;
 import deskind.com.rollingwheels.fragments.AddNewCarFragment;
 import deskind.com.rollingwheels.fragments.CarFragment;
 import deskind.com.rollingwheels.fragments.CurrencyTokenFragment;
@@ -37,6 +41,7 @@ import deskind.com.rollingwheels.fragments.FiltersListFragment;
 import deskind.com.rollingwheels.fragments.FluidsListFragment;
 import deskind.com.rollingwheels.fragments.FuelUpFragment;
 import deskind.com.rollingwheels.fragments.FuelsListFragment;
+import deskind.com.rollingwheels.fragments.OthersListFragment;
 import deskind.com.rollingwheels.fragments.RepairsListFragment;
 import deskind.com.rollingwheels.fragments.ServiceFragment;
 import deskind.com.rollingwheels.fragments.SpendingsFragment;
@@ -79,6 +84,7 @@ public class MnActivity extends FragmentActivity {
     private RepairsListFragment repairsListFragment;
     private FluidsListFragment fluidsListFragment;
     private FiltersListFragment filtersListFragment;
+    private OthersListFragment othersListFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -150,13 +156,14 @@ public class MnActivity extends FragmentActivity {
         closeFabs();
 
         //calcutate spendings for first element in slider if such exists
+        spendingsFragment = (SpendingsFragment) fragmentManager.findFragmentById(R.id.sp_fragment);
         if (!cars.isEmpty()) {
-            spendingsFragment = (SpendingsFragment) fragmentManager.findFragmentById(R.id.sp_fragment);
             spendingsFragment.setSpendings(0);
         } else {
             replaceFragment(R.id.central_fragment, new AddNewCarFragment());
             Toast.makeText(this, "Add a car ...", Toast.LENGTH_LONG).show();
         }
+
     }
 
 
@@ -281,6 +288,11 @@ public class MnActivity extends FragmentActivity {
         replaceFragment(R.id.central_fragment, filtersListFragment);
     }
 
+    public void showOtherssList(View v){
+        othersListFragment = new OthersListFragment();
+        replaceFragment(R.id.central_fragment, othersListFragment);
+    }
+
     public void showSetMileageActivity(View v){
         Intent intent = new Intent(this, SetMileageActivity.class);
         intent.putExtra("CarName", cars.get(pager.getCurrentItem()).getCarBrand());
@@ -348,9 +360,6 @@ public class MnActivity extends FragmentActivity {
     public String getCurrencyToken() {
         return currencyToken;
     }
-
-
-
 
     //INNER CLASSES
     //inner classes
@@ -440,6 +449,8 @@ public class MnActivity extends FragmentActivity {
             }else if(fragments.get(fragments.size()-1) instanceof FuelsListFragment){
                 String carName = cars.get(pager.getCurrentItem()).getCarBrand();
                 ((FuelsListFragment) fragments.get(fragments.size()-1)).update(carName);
+            }else if(fragments.get(fragments.size()-1) instanceof OthersListFragment){
+                ((OthersListFragment) fragments.get(fragments.size()-1)).prepareData();
             }
 
         }

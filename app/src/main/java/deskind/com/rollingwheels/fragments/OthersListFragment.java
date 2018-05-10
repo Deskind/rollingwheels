@@ -16,10 +16,8 @@ import java.util.Map;
 
 import deskind.com.rollingwheels.R;
 import deskind.com.rollingwheels.activities.MnActivity;
-import deskind.com.rollingwheels.adapters.ExpandableFiltersListAdapter;
 import deskind.com.rollingwheels.adapters.ExpandableOthersListAdapter;
 import deskind.com.rollingwheels.database.DBUtility;
-import deskind.com.rollingwheels.entities.FilterService;
 import deskind.com.rollingwheels.entities.OtherService;
 
 public class OthersListFragment extends Fragment {
