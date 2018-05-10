@@ -43,7 +43,8 @@ public class SpendingsFragment extends Fragment {
     }
 
     public void setSpendings (int currentItem){
-        fuelSpendings.setText(String.valueOf(calculator.calcFuelSpendings(context, currentItem)));
+        float f = calculator.calcFuelSpendings(context, currentItem);
+        fuelSpendings.setText(String.format("%.02f", f));
         repairsSpendings.setText(String.valueOf(calculator.calcRepairSpendings(context, currentItem)));
         fluidsSpendings.setText(String.valueOf(calculator.calcFluidsSpendings(context, currentItem)));
         filtersSpendings.setText(String.valueOf(calculator.calcFiltersSpendings(context, currentItem)));
@@ -51,7 +52,8 @@ public class SpendingsFragment extends Fragment {
 
 
     public void setSpendingsForPeriod(int currentItem, String fromString, String toString) {
-        fuelSpendings.setText(String.valueOf(calculator.calcFuelSpendingsForPeriod(context,currentItem,fromString,toString)));
+        float f = calculator.calcFuelSpendingsForPeriod(context,currentItem,fromString,toString);
+        fuelSpendings.setText(String.format("%.02f", f));
         repairsSpendings.setText(String.valueOf(calculator.calcRepairSpendingsForPeriod(context, currentItem, fromString, toString)));
         fluidsSpendings.setText(String.valueOf(calculator.calcFluidsSpendingsForPeriod(context, currentItem, fromString, toString)));
         filtersSpendings.setText(String.valueOf(calculator.calcFiltersSpendingsForPeriod(context, currentItem, fromString, toString)));

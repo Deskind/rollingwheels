@@ -422,7 +422,21 @@ public class MnActivity extends FragmentActivity {
             }else{
                 spendingsFragment.setSpendingsForPeriod(pager.getCurrentItem(), fromDate, toDate);
             }
-            Log.i("SELECTED", "CALLED");
+
+
+            List<Fragment> fragments = fragmentManager.getFragments();
+
+            if(fragments.get(fragments.size()-1) instanceof RepairsListFragment){
+                ((RepairsListFragment) fragments.get(fragments.size()-1)).prepareData();
+            }else if(fragments.get(fragments.size()-1) instanceof FluidsListFragment){
+                ((FluidsListFragment) fragments.get(fragments.size()-1)).prepareData();
+            }else if(fragments.get(fragments.size()-1) instanceof FiltersListFragment){
+                ((FiltersListFragment) fragments.get(fragments.size()-1)).prepareData();
+            }else if(fragments.get(fragments.size()-1) instanceof FuelsListFragment){
+                String carName = cars.get(pager.getCurrentItem()).getCarBrand();
+                ((FuelsListFragment) fragments.get(fragments.size()-1)).update(carName);
+            }
+
         }
 
         @Override

@@ -83,8 +83,15 @@ public class FuelsListFragment extends Fragment {
         headersList = new ArrayList<>();
         mapContent = new HashMap<>();
 
+        int currentItem = activity.getPager().getCurrentItem();
+        String name = MnActivity.cars.get(currentItem).getCarBrand();
+
         //get data from db
-        headersList = DBUtility.getAppDatabase(activity).getCarsDao().getFuelUpsFor(carName);
+        if(activity.periodMode == false) {
+            headersList = DBUtility.getAppDatabase(activity).getCarsDao().getFuelUpsFor(name);
+        }else{
+            headersList = DBUtility.getAppDatabase(activity).getCarsDao().getAllFuelUpsForBrandForPeriod(activity.fromDate, activity.toDate, name);
+        }
 
         //fill with data
         for(FuelUp fuelUp : headersList){
